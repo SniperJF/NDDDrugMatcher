@@ -1,0 +1,7 @@
+
+*.pyc
+
+5YEAR-RESULTS/
+10YEAR-RESULTS/
+output/
+queries/
