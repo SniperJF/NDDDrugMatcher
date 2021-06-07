@@ -123,9 +123,9 @@ Normal saline,,,,,,,,,,,,delete
 Saline,,,,,,,,,,,,delete
 Routine care,,,,,,,,,,,,delete
 Study drug,,,,,,,,,,,,delete
-,,,,,,,,,,,,
-,,,,,,,,,,,,
-,,,,,,,,,,,,
+Placebo,,,,,,,,,,,,delete
+Placebo Comparator,,,,,,,,,,,,delete
+Placebo Oral Tablet,,,,,,,,,,,,delete
 ,,,,,,,,,,,,
 ,,,,,,,,,,,,
 ,,,,,,,,,,,,
