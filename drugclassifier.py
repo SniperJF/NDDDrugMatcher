@@ -38,76 +38,189 @@ def writeToFileSorted(data, fname):
         f.write("\n")
     f.close()    
 
-def readClassifierFiles():
-    drugClassifiers = [] #Will hold drugs, non-drugs, and biomarkers in that order
-    drugClassifiers.append(readFileAsSet("input/classifiers/drugs.txt"))
-    drugClassifiers.append(readFileAsSet("input/classifiers/biomarkers.txt"))
-    drugClassifiers.append(readFileAsSet("input/classifiers/devices.txt"))
-    drugClassifiers.append(readFileAsSet("input/classifiers/non-drugs.txt"))
+def readClassifierFiles(): #NEW
+    #Will Hold: drugs, biomarkers, devices, behaviors, stemcells, supplements, to_delete (in that order)
+    drugClassifiers = {} #7 groups
+    drugClassifiers["drugs"]       = readFileAsSet("input/classifiers/drugs-class.txt")
+    drugClassifiers["biomarkers"]  = readFileAsSet("input/classifiers/biomarkers-class.txt")
+    drugClassifiers["devices"]     = readFileAsSet("input/classifiers/devices-class.txt")
+    drugClassifiers["behaviors"]   = readFileAsSet("input/classifiers/behaviors-class.txt")
+    drugClassifiers["stemcells"]   = readFileAsSet("input/classifiers/stemcells-class.txt")
+    drugClassifiers["supplements"] = readFileAsSet("input/classifiers/supplement-class.txt")
+    drugClassifiers["deleteList"]  = readFileAsSet("input/classifiers/deleteList-class.txt")
     return drugClassifiers
 
 def printClassifiedCTOs(CTOsList1, CTOsList2):
     if len(CTOsList1) != 4 or len(CTOsList2) != 4:
         print("Error: printClassifidCTOs: CTosLists not correct size") #Four Groups
         return
-    printAllInterventions(CTOsList1[0]+CTOsList2[0], "classified-tables/drugs")
-    printAllInterventions(CTOsList1[1]+CTOsList2[1], "classified-tables/biomarkers")
-    printAllInterventions(CTOsList1[2]+CTOsList2[2], "classified-tables/devices")
-    printAllInterventions(CTOsList1[3]+CTOsList2[3], "classified-tables/non-drugs")
+    printAllInterventions(CTOsList1["drugs"]+CTOsList2["drugs"], "classified-tables/drugs")
+    printAllInterventions(CTOsList1["biomarkers"]+CTOsList2["biomarkers"], "classified-tables/biomarkers")
+    printAllInterventions(CTOsList1["devices"]+CTOsList2["devices"], "classified-tables/devices")
+    printAllInterventions(CTOsList1["behaviors"]+CTOsList2["behaviors"], "classified-tables/behaviors")
+    printAllInterventions(CTOsList1["stemcells"]+CTOsList2["stemcells"], "classified-tables/stemcells")
+    printAllInterventions(CTOsList1["supplements"]+CTOsList2["supplements"], "classified-tables/supplements")
+    printAllInterventions(CTOsList1["deleteList"]+CTOsList2["deleteList"], "classified-tables/deleteList")
+    printAllInterventions(CTOsList1["unknownList"]+CTOsList2["unknownList"], "classified-tables/deleteList")
 
 def createFinalTables(CTOsListIT, CTOsListST):
-    if len(CTOsListIT) != 4 or len(CTOsListST) != 4: #we want 4 groups
+    if len(CTOsListIT) != 8 or len(CTOsListST) != 8: #we want 4 groups
         print("Error: createFinalTables:  CTosLists not correct size")
         return    
     #Independent Trial Tables
-    table1 = jft.generateTableFromCTOs(jft.Table1Title, CTOsListIT[0])
-    table3 = jft.generateTableFromCTOs(jft.Table3Title, CTOsListIT[1])
-    table5 = jft.generateTableFromCTOs(jft.Table5Title, CTOsListIT[2])
-    table7 = jft.generateTableFromCTOs(jft.Table7Title, CTOsListIT[3])
-    jft.createCSVfromTable(table1, "final-tables/NDDCrossTable1")
-    jft.createCSVfromTable(table3, "final-tables/NDDCrossTable3")
-    jft.createCSVfromTable(table5, "final-tables/NDDCrossTable5")
-    jft.createCSVfromTable(table7, "final-tables/NDDCrossTable7")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table1Title,  CTOsListIT["drugs"]) ,       "final-tables/NDDCrossTable1")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table3Title,  CTOsListIT["biomarkers"]) ,  "final-tables/NDDCrossTable3")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table5Title,  CTOsListIT["devices"]) ,     "final-tables/NDDCrossTable5")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table7Title,  CTOsListIT["behaviors"]) ,   "final-tables/NDDCrossTable7")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table9Title,  CTOsListIT["stemcells"]) ,   "final-tables/NDDCrossTable9")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table11Title, CTOsListIT["supplements"]) , "final-tables/NDDCrossTable11")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table13Title, CTOsListIT["deleteList"]) ,  "final-tables/NDDCrossTable13")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table15Title, CTOsListIT["unknownList"]) , "final-tables/NDDCrossTable15")
+
     #Single Trial Tables (Same code as above but combined for less lines)
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table2Title, CTOsListST[0]) , "final-tables/NDDCrossTable2")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table4Title, CTOsListST[1]) , "final-tables/NDDCrossTable4")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table6Title, CTOsListST[2]) , "final-tables/NDDCrossTable6")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table8Title, CTOsListST[3]) , "final-tables/NDDCrossTable8")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table2Title,  CTOsListST["drugs"]) ,       "final-tables/NDDCrossTable2")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table4Title,  CTOsListST["biomarkers"]) ,  "final-tables/NDDCrossTable4")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table6Title,  CTOsListST["devices"]) ,     "final-tables/NDDCrossTable6")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table8Title,  CTOsListST["behaviors"]) ,   "final-tables/NDDCrossTable8")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table10Title, CTOsListST["stemcells"]) ,   "final-tables/NDDCrossTable10")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table12Title, CTOsListST["supplements"]) , "final-tables/NDDCrossTable12")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table14Title, CTOsListST["deleteList"]) ,  "final-tables/NDDCrossTable14")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table16Title, CTOsListST["unknownList"]) , "final-tables/NDDCrossTable16")
 
     #Create Hyperlinked Tables:
     for i in range(1,9):
         jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTable"+str(i))
 
-#CTOsList[0]: drugs
-#CTOsList[1]: biomarkers
-#CTOsList[2]: devices
-#CTOsList[3]: non-drugs
-
 #Function classifies all CTOs into four groups and returns a list of four CTOs
 def classifyCTOs(CTOs, drugClassifiers):
     unclassified = set() #List of drugs that we couldn't classify
-    classifiedCTOs = []
-    classifiedCTOs.append([])
-    classifiedCTOs.append([])
-    classifiedCTOs.append([])
-    classifiedCTOs.append([])
+    classifiedCTOs = {}
+    classifiedCTOs["drugs"]       = []
+    classifiedCTOs["biomarkers"]  = []
+    classifiedCTOs["devices"]     = []
+    classifiedCTOs["behaviors"]   = []
+    classifiedCTOs["stemcells"]   = []
+    classifiedCTOs["supplements"] = []
+    classifiedCTOs["deleteList"]  = []
+    classifiedCTOs["unknownList"] = []
     #Time to Classify!
     for entry in CTOs:
         drugName = entry.drugname.lower() #Match lowercase version so it string matches
         classified_success = False
         #Check Each Category to see if the intervention is in it
 
-        #Can add here skipTreatmentList if we so choose to
+        #Can add more custom skipping here for drugnames
 
         #First let's find exact matches.
-        for i in range(len(drugClassifiers)):
+        #for i in range(len(drugClassifiers)):
+        for i in drugClassifiers: #Iterate through all the keys
             if drugName in drugClassifiers[i]:
                 #We have matched to a class
                 classifiedCTOs[i].append(entry) #add CTO to this class
                 classified_success = True
                 break #so we don't add same trial to 2 classes for now
+        #If we havent found a match it may be because this is a single trial multiple NDD table where
+        #The drugname is a list of all items. In which case we want to check each one separately
+        #Since they are comma separated we will go ahead and parse that.
+        if not classified_success:
+            splitdrugName = drugName.split(", ")
+            if splitdrugName > 1: #if true then this was one of those cases and we are now going to process it
+                #To process it we will run through each intervention and classify them individually,
+                #To decide what class we put the overall trial we will try several checks
+                #A - if one class has more interventions we group it to that (excluding deleteList class)
+                #B - If we have a tie we prioritize: drug > biom > device > behavior > stem > suppl. (exclude deleteList again)
+                #C  - Also we want to take out all deletList items from the string so those don't print on the list
+                #D  - if we still have no match then we just keep going to the other if statement
+                separatedInterventions = {} #to store separate ones.
+                for dname in splitdrugName:
+                    for i in drugClassifiers: #Iterate through all the keys
+                        if dName in drugClassifiers[i]:
+                            #we found a match on the substring save it before doing master logic
+                            if drugClassifiers[i] in separatedInterventions: #If key exists append
+                                separatedInterventions[drugClassifiers[i]].append(dName)
+                            else: #make new one
+                                separatedInterventions[drugClassifiers[i]] = [dName]
+                #Now we can do the logic mentioned above
+                
+                maxlength = 0
+                classcount = len(separatedInterventions)
+                #Find max length
+                for k in separatedInterventions:
+                    if len(separatedInterventions[k]) > maxlength:
+                        maxlength = separatedInterventions[k]
+                if maxlength > 0: #We found at least one match so keep going, otherwise give up, #Case #D
+                    finalclass = ""
+                    #Find all of the classes that got maxlength
+                    allmaxlengthclasses = []
+                    for k in separatedInterventions:
+                        if len(separatedInterventions[k]) == maxlength:
+                            allmaxlengthclasses.append(k)
+                    if classcount == 1: #only 1 class so just go with that regardless
+                        finalclass = allmaxlengthclasses[0] #no choice but to go with deletelist
+                    #From here on out it means we have multiple classes and have to make a choice... :
+                    #Multiple classes but there is one with more interventions, so go with that as long as it's not deleteList
+                    elif len(allmaxlengthclasses) == 1 and allmaxlengthclasses[0] != "deleteList": #case #A from above
+                        finalclass = allmaxlengthclasses[0]
+                    else: #Case #B Tie so prioritize
+                        if len(allmaxlengthclasses) == 1 and allmaxlengthclasses[0] == "deleteList":
+                            #the most common class was deleteclasses so before we go further let's find the next maxlength
+                            #and also update allmaxlengthclasses
+                            maxlength = 0
+                            allmaxlengthclasses = []
+                            for k in separatedInterventions:
+                                if len(separatedInterventions[k]) > maxlength and k != "deleteList":
+                                    maxlength = separatedInterventions[k]                       
+                            for k in separatedInterventions:
+                                if len(separatedInterventions[k]) == maxlength:
+                                    allmaxlengthclasses.append(k)
+                        #Okay now we can move on without worrying about that special case
+                        if len(allmaxlengthclasses) == 1:
+                            #the next maxlength only had one class, that's easy just pick that
+                            finalclass = allmaxlengthclasses[0]
+                        else: #we are here because it the current max length has more than 1 class
+                            #we got here either because deletelist was removed and next tier has a tie
+                            #or because the top winner has a tie and deleteList may be among those with tie
+                            #however if deletelist is here then there has to be another class too by the
+                            #logic written, and my logic is undeniable so do not worry about ending up
+                            #with having to pick deleteList, this should never happen at this point.
+                            #Priority: drug > biom > device > behavior > stem > suppl. (exclude deleteList again)
+                            #let's just do this with a bunch of if statements
+                            if "drugs" in allmaxlengthclasses:
+                                #Top priority assign this.
+                                finalclass = "drugs"
+                            elif "biomarkers" in allmaxlengthclasses:
+                                finalclass = "biomarkers"
+                            elif "devices" in allmaxlengthclasses:
+                                finalclass = "devices"
+                            elif "behaviors" in allmaxlengthclasses:
+                                finalclass = "behaviors"
+                            elif "stemcells" in allmaxlengthclasses:
+                                finalclass = "stemcells"
+                            elif "supplements" in allmaxlengthclasses:
+                                finalclass = "supplements"
+                            elif "deleteList" in allmaxlengthclasses:
+                                print("Warning: We shouldn't see deleteList Here, check code!")
+                                finalclass = "deleteList"
+                            else:
+                                print("Warning: Unable to resolve final class!")
+                    #Now that we have decided on a class, before appending, let's remove any 
+                    #deleteList items from the drugname if we did not classify this to deleteList.
+                    if finalclass != "deleteList" and "deleteList" in separatedInterventions:
+                        splitOriginalDrugname = entry.drugname.split(", ") #Current list of drugs
+                        newDrugName = ""
+                        #create new drugname, same as current but without deleteList interventions
+                        for i in splitOriginalDrugname:
+                            if i.lower() not in separatedInterventions["deleteList"]:
+                                newDrugName += i + ", "
+                        entry.drugname = newDrugName[:-2] #save the new drugname, remove last comma and space
+                    #Let's apppend!
+                    classifiedCTOs[finaltable].append(entry) #add CTO to this class
+                    classified_success = True
+
         if not classified_success: #If we still haven't matched then let's try to search for partial match
-            for i in range(len(drugClassifiers)): #check each class
+            #in the new version this  case really should not happen
+            #for i in range(len(drugClassifiers)): #check each class
+            for i in drugClassifiers: #check each class by key
                 for intervention in drugClassifiers[i]: #check each intervention in that class
                     if intervention in drugName:
                         classifiedCTOs[i].append(entry) #we found a partial match so let's go with that
@@ -117,7 +230,7 @@ def classifyCTOs(CTOs, drugClassifiers):
                     break #movie on to next CTO
         if not classified_success: #if we still haven't found a match...
             #let's just assume it's a non-drug, but also let's make a list of them for improving the system
-            classifiedCTOs[3].append(entry)
+            classifiedCTOs["unknownList"].append(entry)
             unclassified.add(entry.drugname) #Append the normal casing
     return classifiedCTOs, unclassified
 

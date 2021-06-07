@@ -106,7 +106,7 @@ jft.makeJSONmatchedCTO(matchedCTO) #Not used currently but left on since may be 
 #TIME TO MAKE TABLES
 
 #Let's start with Table 2 of Cross NDD
-#    Table 10.  All interventions in single trials that included more than 1 neurodegenerative disorder.
+#    Table ST.  All interventions in single trials that included more than 1 neurodegenerative disorder.
 # This one is ez
 #we will just run through our object dictionary and find ones with length > 1 of the conditions array. Also good to test
 #all our system
@@ -120,7 +120,7 @@ multiConditionNCTIDList = [] #Will hold all NCTID of Trials that have more than 
 #print(matchedCTO["NCT03658135"].getInterventionDrugsStr())
 #multiConditionNCTIDList.append(['NCT03658135', '2019-12-19']) #Test
 
-##TABLE 10 MAIN CODE
+##TABLE ST MAIN CODE
 for ctrial in matchedCTO:
     if (len(matchedCTO[ctrial].condition) > 1 and 
             matchedCTO[ctrial].condition[0] != "Healthy Volunteers" and 
@@ -134,21 +134,21 @@ for ctrial in matchedCTO:
 multiConditionNCTIDList.sort(key = lambda row: row[1], reverse=True)
 
 #Create our final version of Table 10
-table10CTOs = jft.generateCTOTable10(multiConditionNCTIDList, matchedCTO)
-table10Final = jft.generateTableFromCTOs(jft.Table10Title, table10CTOs)
+tableSTCTOs = jft.generateCTOTableST(multiConditionNCTIDList, matchedCTO)
+tableSTFinal = jft.generateTableFromCTOs(jft.TableSTTitle, tableSTCTOs)
 
 #Write the new csv
-jft.createCSVfromTable(table10Final, "final-tables/NDDCrossTable10")
-#with open('output/NDDCrossTable2.csv', 'w', newline='') as csv_outfile:
+jft.createCSVfromTable(tableSTFinal, "final-tables/NDDCrossTableST")
+#with open('output/NDDCrossTableST.csv', 'w', newline='') as csv_outfile:
 #    outfile = csv.writer(csv_outfile)    
-#    outfile.writerows(table2Final)
+#    outfile.writerows(tableSTFinal)
 
 
-#Create Hyperlinked version of NDDCrossTable10.csv
-jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTable10")
+#Create Hyperlinked version of NDDCrossTableST.csv
+jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableST")
 
 
-#TABLE 9 MAIN CODE:
+#TABLE IT MAIN CODE:
 #In this one we are looking for drugs that appear in more than 1 trial. First phase let's find exact match entries
 #Second phase later (with old code?) we can try to find partial matches by searching for individual words that match
 iTMLP1 = [] #Independent Trial Match List Phase 1, Each entry holds:
@@ -219,24 +219,24 @@ for drugname in iTMDP1:
 #Let's sort by newest post date of each set so new stuff appears first (so descending order)
 iTMLP1.sort(key = lambda col: col[2], reverse=True)
 
-#Create our final version of Table 9
-table9CTOs = jft.generateCTOTable9(iTMLP1, matchedCTO)
-table9Final = jft.generateTableFromCTOs(jft.Table9Title, table9CTOs)
+#Create our final version of Table IT
+tableITCTOs = jft.generateCTOTableIT(iTMLP1, matchedCTO)
+tableITFinal = jft.generateTableFromCTOs(jft.TableITTitle, tableITCTOs)
 
 #Write the new csv
-jft.createCSVfromTable(table9Final, "final-tables/NDDCrossTable9")
+jft.createCSVfromTable(tableITFinal, "final-tables/NDDCrossTableIT")
 
-#Create Hyperlinked version of NDDCrossTable9.csv
-jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTable9")
+#Create Hyperlinked version of NDDCrossTableIT.csv
+jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTableIT")
 
 #Phase 2 Here. TODO  (Single word matches)
 
 #Make JSONS of Table 1 and 2.  #These would be equivalent to table1Final once rendered as table
-jft.makeJSONFromCTOsList(table9CTOs, 1)
-jft.makeJSONFromCTOsList(table10CTOs, 2)
+jft.makeJSONFromCTOsList(tableITCTOs, 1)
+jft.makeJSONFromCTOsList(tableSTCTOs, 2)
 
 #Next we run drugclassifier to separate intervention matched into groups like non-drug, 
 #disease-modifying drug, biomarkers, devices etc... for both CTOs 
-jfd.runDrugClassifier(table9CTOs, table10CTOs) #9 is Independent Trials, 10 is single trials
+jfd.runDrugClassifier(tableITCTOs, tableSTCTOs) #IT is Independent Trials, ST is single trials
 
 #END OF PROGRAM. CREATED BY JORGE FONSECA AND SAM BLACK
