@@ -1,6 +1,7 @@
 #This script opens the csv files that Dr. Cummings modified to classify the intervention type and generate text files with each category
 #Run as: 
 #time python3 csvClassifier.py
+#TODO add as command line argument option to run with all tolower or without (case insesitive vs sensitive)
 
 import csv 
 #Functions
