@@ -1,4 +1,6 @@
 #This script opens the csv files that Dr. Cummings modified to classify the intervention type and generate text files with each category
+#Run as: 
+#time python3 csvClassifier.py
 
 import csv 
 #Functions
@@ -16,7 +18,8 @@ def processFile(fname):
         csv_data = csv.reader(csv_file, delimiter=',')
         for row in csv_data:
             if row[0] != '':
-                interventions.append([ row[0],row[12] ])
+                interventions.append([ row[0],row[12] ]) #Case Sensitive Version
+                #interventions.append([ row[0].lower(),row[12] ]) #Lower Case Version (case insensitive)
     return interventions[2:] #Skip first 2 rows
 
 #This one reads for table 10 which has multiple interventions in the same line so let's split them up
@@ -26,7 +29,8 @@ def processFileWithMult(fname):
     for entry in mixedInterventions:
         splitEntry = entry[0].split(", ")
         for subEntry in splitEntry:
-            separatedInterventions.append([ subEntry,entry[1] ])
+            separatedInterventions.append([ subEntry,entry[1] ]) #Case Sensitive Version
+            #separatedInterventions.append([ subEntry.lower(),entry[1] ]) #Lower Case Version (case insensitive)
     return separatedInterventions
 
 
@@ -104,6 +108,7 @@ def main():
 
     interventions  = processFile("NDDCrossTable9HyperLinked.jlc.060521")
     interventions += processFileWithMult("NDDCrossTable10HyperLinked.jlc")
+    interventions += processFile("ManualExtraClasses")
 
     printTemetry(interventions)
 
@@ -132,14 +137,14 @@ def main():
     printPartialIntercepts(behaviors, biomarkers, drugs, devices, stemcells, supplement, deleteList, unknown)
 
     #Next write our output files with the classes each intervention belongs to
-    writeListToFileSorted(behaviors, "output/", "behaviors-class.txt")
-    writeListToFileSorted(biomarkers, "output/", "biomarkers-class.txt")
-    writeListToFileSorted(drugs, "output/", "drugs-class.txt")
-    writeListToFileSorted(devices, "output/", "devices-class.txt")
-    writeListToFileSorted(stemcells, "output/", "stemcells-class.txt")
-    writeListToFileSorted(supplement, "output/", "supplement-class.txt")
-    writeListToFileSorted(deleteList, "output/", "deleteList-class.txt")
-    writeListToFileSorted(unknown, "output/", "unknown-class.txt")
+    writeListToFileSorted(behaviors, "output/", "behaviors-class")
+    writeListToFileSorted(biomarkers, "output/", "biomarkers-class")
+    writeListToFileSorted(drugs, "output/", "drugs-class")
+    writeListToFileSorted(devices, "output/", "devices-class")
+    writeListToFileSorted(stemcells, "output/", "stemcells-class")
+    writeListToFileSorted(supplement, "output/", "supplement-class")
+    writeListToFileSorted(deleteList, "output/", "deleteList-class")
+    writeListToFileSorted(unknown, "output/", "unknown-class")
 #End main()
 
 if __name__ == "__main__":
