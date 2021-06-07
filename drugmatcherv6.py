@@ -1,3 +1,4 @@
+#This is where the program starts from
 from common import jfc
 import tablegeneration as jft
 import drugclassifier as jfd

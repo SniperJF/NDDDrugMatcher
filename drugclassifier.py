@@ -1,4 +1,4 @@
-
+#This is the classification part of program
 from common import jfc
 import tablegeneration as jft
 
@@ -54,14 +54,14 @@ def printClassifiedCTOs(CTOsList1, CTOsList2):
     if len(CTOsList1) != 8 or len(CTOsList2) != 8:
         print("Error: printClassifidCTOs: CTosLists not correct size") #Four Groups
         return
-    printAllInterventions(CTOsList1["drugs"]+CTOsList2["drugs"], "classified-tables/drugs")
-    printAllInterventions(CTOsList1["biomarkers"]+CTOsList2["biomarkers"], "classified-tables/biomarkers")
-    printAllInterventions(CTOsList1["devices"]+CTOsList2["devices"], "classified-tables/devices")
-    printAllInterventions(CTOsList1["behaviors"]+CTOsList2["behaviors"], "classified-tables/behaviors")
-    printAllInterventions(CTOsList1["stemcells"]+CTOsList2["stemcells"], "classified-tables/stemcells")
+    printAllInterventions(CTOsList1["drugs"]+CTOsList2["drugs"],             "classified-tables/drugs")
+    printAllInterventions(CTOsList1["biomarkers"]+CTOsList2["biomarkers"],   "classified-tables/biomarkers")
+    printAllInterventions(CTOsList1["devices"]+CTOsList2["devices"],         "classified-tables/devices")
+    printAllInterventions(CTOsList1["behaviors"]+CTOsList2["behaviors"],     "classified-tables/behaviors")
+    printAllInterventions(CTOsList1["stemcells"]+CTOsList2["stemcells"],     "classified-tables/stemcells")
     printAllInterventions(CTOsList1["supplements"]+CTOsList2["supplements"], "classified-tables/supplements")
-    printAllInterventions(CTOsList1["deleteList"]+CTOsList2["deleteList"], "classified-tables/deleteList")
-    printAllInterventions(CTOsList1["unknownList"]+CTOsList2["unknownList"], "classified-tables/deleteList")
+    printAllInterventions(CTOsList1["deleteList"]+CTOsList2["deleteList"],   "classified-tables/deleteList")
+    printAllInterventions(CTOsList1["unknownList"]+CTOsList2["unknownList"], "classified-tables/unknownList")
 
 def createFinalTables(CTOsListIT, CTOsListST):
     if len(CTOsListIT) != 8 or len(CTOsListST) != 8: #we want 4 groups
@@ -88,7 +88,7 @@ def createFinalTables(CTOsListIT, CTOsListST):
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table16Title, CTOsListST["unknownList"]) , "final-tables/NDDCrossTable16")
 
     #Create Hyperlinked Tables:
-    for i in range(1,9):
+    for i in range(1,17):
         jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTable"+str(i))
 
 #Function classifies all CTOs into four groups and returns a list of four CTOs
@@ -241,6 +241,7 @@ def classifyCTOs(CTOs, drugClassifiers):
 def runDrugClassifier(CTOsIT, CTOsST):
 
     #First let's save all interventions into a file and call it allinterventions
+    #This is pre removal of anything
     printAllInterventions(CTOsIT+CTOsST, "classified-tables/all-interventions")
 
     #next, load all text files to use to separate items
