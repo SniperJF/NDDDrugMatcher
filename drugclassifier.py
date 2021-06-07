@@ -51,7 +51,7 @@ def readClassifierFiles(): #NEW
     return drugClassifiers
 
 def printClassifiedCTOs(CTOsList1, CTOsList2):
-    if len(CTOsList1) != 4 or len(CTOsList2) != 4:
+    if len(CTOsList1) != 8 or len(CTOsList2) != 8:
         print("Error: printClassifidCTOs: CTosLists not correct size") #Four Groups
         return
     printAllInterventions(CTOsList1["drugs"]+CTOsList2["drugs"], "classified-tables/drugs")
@@ -124,22 +124,22 @@ def classifyCTOs(CTOs, drugClassifiers):
         #Since they are comma separated we will go ahead and parse that.
         if not classified_success:
             splitdrugName = drugName.split(", ")
-            if splitdrugName > 1: #if true then this was one of those cases and we are now going to process it
+            if len(splitdrugName) > 1: #if true then this was one of those cases and we are now going to process it
                 #To process it we will run through each intervention and classify them individually,
                 #To decide what class we put the overall trial we will try several checks
                 #A - if one class has more interventions we group it to that (excluding deleteList class)
                 #B - If we have a tie we prioritize: drug > biom > device > behavior > stem > suppl. (exclude deleteList again)
                 #C  - Also we want to take out all deletList items from the string so those don't print on the list
                 #D  - if we still have no match then we just keep going to the other if statement
-                separatedInterventions = {} #to store separate ones.
+                separatedInterventions = dict() #to store separate ones.
                 for dname in splitdrugName:
                     for i in drugClassifiers: #Iterate through all the keys
-                        if dName in drugClassifiers[i]:
+                        if dname in drugClassifiers[i]:
                             #we found a match on the substring save it before doing master logic
-                            if drugClassifiers[i] in separatedInterventions: #If key exists append
-                                separatedInterventions[drugClassifiers[i]].append(dName)
+                            if i in separatedInterventions: #If key exists append
+                                separatedInterventions[i].append(dname)
                             else: #make new one
-                                separatedInterventions[drugClassifiers[i]] = [dName]
+                                separatedInterventions[i] = [dname]
                 #Now we can do the logic mentioned above
                 
                 maxlength = 0
@@ -147,7 +147,7 @@ def classifyCTOs(CTOs, drugClassifiers):
                 #Find max length
                 for k in separatedInterventions:
                     if len(separatedInterventions[k]) > maxlength:
-                        maxlength = separatedInterventions[k]
+                        maxlength = len(separatedInterventions[k])
                 if maxlength > 0: #We found at least one match so keep going, otherwise give up, #Case #D
                     finalclass = ""
                     #Find all of the classes that got maxlength
@@ -169,7 +169,7 @@ def classifyCTOs(CTOs, drugClassifiers):
                             allmaxlengthclasses = []
                             for k in separatedInterventions:
                                 if len(separatedInterventions[k]) > maxlength and k != "deleteList":
-                                    maxlength = separatedInterventions[k]                       
+                                    maxlength = len(separatedInterventions[k])
                             for k in separatedInterventions:
                                 if len(separatedInterventions[k]) == maxlength:
                                     allmaxlengthclasses.append(k)
@@ -214,7 +214,7 @@ def classifyCTOs(CTOs, drugClassifiers):
                                 newDrugName += i + ", "
                         entry.drugname = newDrugName[:-2] #save the new drugname, remove last comma and space
                     #Let's apppend!
-                    classifiedCTOs[finaltable].append(entry) #add CTO to this class
+                    classifiedCTOs[finalclass].append(entry) #add CTO to this class
                     classified_success = True
 
         if not classified_success: #If we still haven't matched then let's try to search for partial match

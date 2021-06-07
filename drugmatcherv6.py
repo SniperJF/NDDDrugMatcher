@@ -13,7 +13,7 @@ ndddesignoutcomes = []  #chartsv4C design outcomes
 finalentries = []
 
 #Cleanup Output Directory
-#jfc.cleanOutputFiles() #Comment out for speed boost
+jfc.cleanOutputFiles() #Comment out for speed boost
 
 #Read in data
 with open("output/nddtrials.csv") as csv_file:
