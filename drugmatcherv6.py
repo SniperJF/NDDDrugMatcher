@@ -128,6 +128,16 @@ for ctrial in matchedCTO:
             matchedCTO[ctrial].condition[1] != "Healthy Volunteers"): #Avoid detecting this false positive
         #Found something to add. Save the NCTID and last posted date
         if len(matchedCTO[ctrial].intervention) > 0 or len(matchedCTO[ctrial].otherIntervention) > 0: #don't add trials without drugs.
+            #Extra Special Check to avoid including MCI/AD pairs and PD/MCI pairs unless something else is involved.
+            try: 
+                condlist = matchedCTO[ctrial].getConditionAcronyms()
+                if len(matchedCTO[ctrial].condition) == 2:
+                    if "MCI" in condlist and ( "PD" in condlist or "AD" in condlist):
+                        continue #Don'add!
+            except:
+                print("warning Filtering MCI/PD and MCI/AD! [1]")
+                pass
+            #END NEW CODE CHECK
             multiConditionNCTIDList.append([matchedCTO[ctrial].nctid,matchedCTO[ctrial].lastpostedDate])
             #may be able to remove this if statement if we re-do our SQL query and remove non-interventional trials?
 
@@ -198,6 +208,28 @@ for drugname in iTMDP1:
                 for cond in matchedCTO[nctid].condition:
                     if cond not in firstTrialConditions and cond != "Healthy Volunteers": #Don't count this as a different NDD
                         #we found a trial in the set that has a different NDD, add drug entry to iTMLP1
+
+                        #TODO
+                        #Special Check to avoid including MCI/AD pairs and PD/MCI pairs unless something else is involved.
+                        #try: 
+                        #    T1 = matchedCTO[iTMDP1[drugname][0]].getConditionAcronyms()
+                        #    T2 = matchedCTO[nctid].getConditionAcronyms()
+                        #    if len(T1) == 1 and len(T2) == 1:
+                        #        if "MCI" in T1 and ("AD" in T2 or "PD" in T2):
+                        #            continue 
+                        #        if "AD"  in T1 and "MCI" in T2:
+                        #            continue
+                        #        if "PD"  in T1 and "MCI" in T2:
+                        #            continue
+                        #    if len(T1) == 2 and "MCI" in T1 and "AD" in T1:
+                        #        if len(T2) == 1 and "AD" in T2:
+                        #            continue
+                        #except:
+                        #    print("warning Filtering MCI/PD and MCI/AD! [2]")
+                        #    pass
+                        #END NEW CODE CHECK                       
+                        #TODO
+
                         setNCTIDsWDate = []
                         for n in iTMDP1[drugname]:
                             setNCTIDsWDate.append([n,matchedCTO[n].lastpostedDate]) #make a list holding all nctid and last posted date
