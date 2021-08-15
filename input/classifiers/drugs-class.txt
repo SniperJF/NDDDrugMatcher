@@ -170,7 +170,6 @@ Nuedexta
 ONO-2506PO
 Olanzapine
 Oxaloacetate (OAA)
-PK microsampling of blood
 PU-AD
 Paracetamol
 Perampanel
@@ -194,7 +193,6 @@ Ramelteon
 Rapamune
 Rapamycin
 Rasagiline
-Registry
 Regular Insulin
 Reminyl
 Rifadin

@@ -48,9 +48,13 @@ def readClassifierFiles(): #NEW
     drugClassifiers["stemcells"]   = readFileAsSet("input/classifiers/stemcells-class.txt")
     drugClassifiers["supplements"] = readFileAsSet("input/classifiers/supplement-class.txt")
     drugClassifiers["deleteList"]  = readFileAsSet("input/classifiers/deleteList-class.txt")
-    return drugClassifiers
 
-def printClassifiedCTOs(CTOsList1, CTOsList2):
+    subdrugClassifiers = {} #2 groups:  Symptomatic Drugs and Disease Modifying Drugs
+    subdrugClassifiers["sx-drugs"] = readFileAsSet("input/classifiers/sx-subclass.txt")
+    subdrugClassifiers["dm-drugs"] = readFileAsSet("input/classifiers/dm-subclass.txt")   
+    return drugClassifiers, subdrugClassifiers
+
+def printClassifiedCTOs(CTOsList1, CTOsList2, subCTOsList1, subCTOsList2):
     if len(CTOsList1) != 8 or len(CTOsList2) != 8:
         print("Error: printClassifidCTOs: CTosLists not correct size") #Four Groups
         return
@@ -63,7 +67,11 @@ def printClassifiedCTOs(CTOsList1, CTOsList2):
     printAllInterventions(CTOsList1["deleteList"]+CTOsList2["deleteList"],   "classified-tables/deleteList")
     printAllInterventions(CTOsList1["unknownList"]+CTOsList2["unknownList"], "classified-tables/unknownList")
 
-def createFinalTables(CTOsListIT, CTOsListST):
+    printAllInterventions(subCTOsList1["sx-drugs"]+subCTOsList2["sx-drugs"], "classified-tables/sx-drugs")
+    printAllInterventions(subCTOsList1["dm-drugs"]+subCTOsList2["dm-drugs"], "classified-tables/dm-drugs")
+    printAllInterventions(subCTOsList1["unknownList"]+subCTOsList2["unknownList"], "classified-tables/unknownList-subclass")
+
+def createFinalTables(CTOsListIT, CTOsListST, subCTOsListIT, subCTOsListST):
     if len(CTOsListIT) != 8 or len(CTOsListST) != 8: #we want 4 groups
         print("Error: createFinalTables:  CTosLists not correct size")
         return    
@@ -77,7 +85,7 @@ def createFinalTables(CTOsListIT, CTOsListST):
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table13Title, CTOsListIT["deleteList"]) ,  "final-tables/NDDCrossTable13")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table15Title, CTOsListIT["unknownList"]) , "final-tables/NDDCrossTable15")
 
-    #Single Trial Tables (Same code as above but combined for less lines)
+    #Single Trial Tables
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table2Title,  CTOsListST["drugs"]) ,       "final-tables/NDDCrossTable2")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table4Title,  CTOsListST["biomarkers"]) ,  "final-tables/NDDCrossTable4")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table6Title,  CTOsListST["devices"]) ,     "final-tables/NDDCrossTable6")
@@ -87,12 +95,21 @@ def createFinalTables(CTOsListIT, CTOsListST):
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table14Title, CTOsListST["deleteList"]) ,  "final-tables/NDDCrossTable14")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table16Title, CTOsListST["unknownList"]) , "final-tables/NDDCrossTable16")
 
+    #Subclassification Tables Independent Trials
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table17Title, subCTOsListIT["sx-drugs"]) ,    "final-tables/NDDCrossTable17")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table19Title, subCTOsListIT["dm-drugs"]) ,    "final-tables/NDDCrossTable19")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table21Title, subCTOsListIT["unknownList"]) , "final-tables/NDDCrossTable21")    
+    #Subclassification Tables Single Trials
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table18Title, subCTOsListST["sx-drugs"]) ,    "final-tables/NDDCrossTable18")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table20Title, subCTOsListST["dm-drugs"]) ,    "final-tables/NDDCrossTable20")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table22Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable22")
+
     #Create Hyperlinked Tables:
-    for i in range(1,17):
+    for i in range(1,23):
         jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTable"+str(i))
 
-#Function classifies all CTOs into four groups and returns a list of four CTOs
-def classifyCTOs(CTOs, drugClassifiers):
+#Function classifies all CTOs into independent groups and returns a list of CTOs
+def classifyCTOs(CTOs, drugClassifiers, subClassifiers):
     unclassified = set() #List of drugs that we couldn't classify
     classifiedCTOs = {}
     classifiedCTOs["drugs"]       = []
@@ -103,6 +120,11 @@ def classifyCTOs(CTOs, drugClassifiers):
     classifiedCTOs["supplements"] = []
     classifiedCTOs["deleteList"]  = []
     classifiedCTOs["unknownList"] = []
+    #Subclassification of drugs
+    subclassifiedCTOs = {}
+    subclassifiedCTOs["sx-drugs"]    = []
+    subclassifiedCTOs["dm-drugs"]    = []
+    subclassifiedCTOs["unknownList"] = []
     #Time to Classify!
     for entry in CTOs:
         drugName = entry.drugname.lower() #Match lowercase version so it string matches
@@ -117,6 +139,14 @@ def classifyCTOs(CTOs, drugClassifiers):
             if drugName in drugClassifiers[i]:
                 #We have matched to a class
                 classifiedCTOs[i].append(entry) #add CTO to this class
+                if i == "drugs": #If this CTO match is a drug, let's try to add to a drug subclass
+                    subclassified_success = False
+                    for j in subClassifiers:
+                        if drugName in subClassifiers[j]:
+                            subclassified_success = True #we matched a subclass
+                            subclassifiedCTOs[j].append(entry) #add CTO to this subclass too
+                    if not subclassified_success:
+                        subclassifiedCTOs["unknownList"].append(entry)
                 classified_success = True
                 break #so we don't add same trial to 2 classes for now
         #If we havent found a match it may be because this is a single trial multiple NDD table where
@@ -217,6 +247,19 @@ def classifyCTOs(CTOs, drugClassifiers):
                     classifiedCTOs[finalclass].append(entry) #add CTO to this class
                     classified_success = True
 
+                    if finalclass == "drugs": #If this finalclass is a drug, let's try to add to a drug subclass
+                        subclassified_success = False
+                        already_inserted_list = []
+                        for dname in splitdrugName:
+                            for i in subClassifiers: #Iterate through all the keys
+                                if i not in already_inserted_list and dname in subClassifiers[i]:
+                                    subclassified_success = True #we found a match on the substring 
+                                    subclassifiedCTOs[i].append(entry)
+                                    already_inserted_list.append(i) #So we dont insert something twice if it has 2 sx
+                                    break
+                        if not subclassified_success:
+                            subclassifiedCTOs["unknownList"].append(entry)
+
         if not classified_success: #If we still haven't matched then let's try to search for partial match
             #in the new version this  case really should not happen
             #for i in range(len(drugClassifiers)): #check each class
@@ -225,6 +268,8 @@ def classifyCTOs(CTOs, drugClassifiers):
                     if intervention in drugName:
                         classifiedCTOs[i].append(entry) #we found a partial match so let's go with that
                         classified_success = True
+                        if i == "drugs":
+                            print("Verify:", intervention)
                         break #so we stop checking for this drug
                 if classified_success: #If we found a match in previous class
                     break #movie on to next CTO
@@ -232,7 +277,7 @@ def classifyCTOs(CTOs, drugClassifiers):
             #let's just assume it's a non-drug, but also let's make a list of them for improving the system
             classifiedCTOs["unknownList"].append(entry)
             unclassified.add(entry.drugname) #Append the normal casing
-    return classifiedCTOs, unclassified
+    return classifiedCTOs, subclassifiedCTOs, unclassified
 
 
 #drugclassifier main function to separate intervention matched into groups like non-drug
@@ -245,11 +290,11 @@ def runDrugClassifier(CTOsIT, CTOsST):
     printAllInterventions(CTOsIT+CTOsST, "classified-tables/all-interventions")
 
     #next, load all text files to use to separate items
-    drugClassifiers = readClassifierFiles()
+    drugClassifiers, subclassifiers = readClassifierFiles()
     
     #Do classification and return a list of 3 CTOs sets classified
-    classifiedCTOsListIT,unclassified1 = classifyCTOs(CTOsIT, drugClassifiers)
-    classifiedCTOsListST,unclassified2 = classifyCTOs(CTOsST, drugClassifiers)
+    classifiedCTOsListIT, subclassifiedCTOsListIT, unclassified1 = classifyCTOs(CTOsIT, drugClassifiers, subclassifiers)
+    classifiedCTOsListST, subclassifiedCTOsListST, unclassified2 = classifyCTOs(CTOsST, drugClassifiers, subclassifiers)
     unclassified = unclassified1.union(unclassified2)
 
     #Create a list with all the unclassified so we can improve later
@@ -257,10 +302,10 @@ def runDrugClassifier(CTOsIT, CTOsST):
         jfc.writeListToFileSorted(unclassified, "output/classified-tables/", "unclassified-interventions")
 
     #create output files to be used for verification
-    printClassifiedCTOs(classifiedCTOsListIT, classifiedCTOsListST)
+    printClassifiedCTOs(classifiedCTOsListIT, classifiedCTOsListST, subclassifiedCTOsListIT, subclassifiedCTOsListST)
 
     #finally let's create our final tables as CSV
-    createFinalTables(classifiedCTOsListIT, classifiedCTOsListST)
+    createFinalTables(classifiedCTOsListIT, classifiedCTOsListST, subclassifiedCTOsListIT, subclassifiedCTOsListST)
 
 #END CODE
 

@@ -77,6 +77,7 @@ Optical Coherence Tomography
 Optical coherence tomography
 PET
 PET Biomarker Disclosure
+PK microsampling of blood
 Peripheral Nerve Stimulation
 Peripheral nerve stimulation
 Phonetic complexity effects on speech motor performance
@@ -88,6 +89,7 @@ Positive and Negative Affect Scale (PANAS)
 Positron
 Positron-Emission Tomography (TEP) /(FDG)
 Psychiatric tests
+Registry
 Rey-Osterrieth Complex Figure Test (ROCFT)
 Routine care
 Saline
