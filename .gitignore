@@ -1,9 +1,29 @@
-
+#Ignore these files
 *.pyc
 
 5YEAR-RESULTS/
 10YEAR-RESULTS/
 output/
 queries/
-
 input/old-unused/
+
+#Except for the README.md files in the directories (used to make dir too)
+!queries/
+queries/*
+!queries/README.md
+
+!output/
+output/*
+!output/classified-tables/
+output/classified-tables/*
+!output/classified-tables/README.md
+
+!output/final-tables/
+output/final-tables/*
+!output/final-tables/hyperlinked
+output/final-tables/hyperlinked/*
+!output/final-tables/hyperlinked/README.md
+
+!output/json-tables/
+output/json-tables/*
+!output/json-tables/README.md
