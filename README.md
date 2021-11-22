@@ -13,4 +13,4 @@ time python3 drugmatcherv6.py
 
 #Then look at output folder for results
 
-Code by Jorge Fonseca and Sam Black
+
