@@ -40,7 +40,7 @@ class jfc:
         "Alzheimer's Disease": "AD",
         "Corticobasal Degeneration": "CBD",
         "corticobasal degen": "CBD",
-        "Lewy Body Disease": "LWB",
+        #"Lewy Body Disease": "LWB",
         "Frontotemporal Lobar Degeneration": "FTDLD",
         "Huntington's Disease": "HD",
         "huntington": "HD",
