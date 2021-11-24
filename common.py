@@ -8,6 +8,12 @@ class jfc:
                       "Dementia With Lewy Bodies","Frontotemporal","Huntington","Multiple System Atrophy",
                       "Parkin","Progressive Supranuclear Palsy", "Mild Cognitive Impairment"}
 
+    #To try partial matching
+    diseaselowercasep = {"alzh","amyotro","chronic traumatic encephalopathy","corticobasal degen",
+                      "dementia with lewy bodies","frontotemporal","huntington","multiple system atrophy",
+                      "parkin","progressive supranuclear palsy", "mild cognitive impairment", "palsy"
+                      " ad ", "ftdld", " dlb ", "lewy body dementia"}
+
     #So this one is so we can see if diseases are different by using the power of hashing
     #only meant for duplicate removal atm
     diseaseHashMap = {
@@ -135,6 +141,7 @@ class jfc:
             self.studyStatus = studyStatus
             self.outcomeTitle = [] #we will add these later
             self.outcomeDescription = [] #we will add these later
+            self.eligibilities = [] #we optionally can add these later
             self.addCondition(condition)
             self.addInterventions(intervention, 0)
             self.addInterventions(otherIntervention, 1)
@@ -163,6 +170,9 @@ class jfc:
                 self.designMeasures.append(dMeasure)
             if dDescription not in self.designDescription:
                 self.designDescription.append(dDescription)
+        def addEligibilities(self, e):
+            if e not in self.eligibilities:
+                self.eligibilities.append(e)
         def getShortPhase(self):
             return self.phase.replace("Phase ", "P") #for our table appearance
         def getShortTimeFrame(self):
@@ -272,6 +282,11 @@ class jfc:
                         printstr += "Description: " + self.outcomeDescription[i] + "\n"
             else:
                 printstr += "No Outcomes Listed.\n"
+            #Currently we do not print eligibilities, if we want to we can uncomment this to print them
+            #if len(self.eligibilities) > 0:
+            #    printstr += "Eligibility Criteria: "
+            #    for e in self.eligibilities:
+            #        printstr += str(e)
             return printstr
     #End clinicalTrial class
     class drugClinicalTrialSet: #Class I use instead of a dictionary for Tables 1 and 3
