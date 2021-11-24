@@ -6,6 +6,7 @@ Accelerometer
 Active Transcranial Direct Current Stimulation (tDCS)
 Active tDCS
 Active tPBM-2.0
+Activlink insole, Activlink Phone Application
 Addenbrooke's cognitive examination
 Altoida: neuropsychological
 AltoidaML
