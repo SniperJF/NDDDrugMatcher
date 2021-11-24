@@ -25,13 +25,17 @@ from common import jfc
 matchentries = [] #store matches
 nddoutcomes = [] #stores nctid, outcome title/desc of relevant entries that match matchentries
 ndddesignoutcomes = [] #stores design outcomes nctid, measure, time frame, description (fills in missing stuff from normal outcomes)
+nddeligibilities = [] #stores nctid and elgibility criteria (for finding mentions of diseases that we are interested in)
+ignoretrials = set() #stores nctid of trials we want to ignore - used to ignore eligibility trials that are beyond time range we want
+trialsSaved = set() #stores nctid of all trials we currently identified as with a ndd
 with open("queries/chartsv4A.csv") as csv_file:
     csv_data = csv.reader(csv_file, delimiter=',')
     for row in csv_data:
         #Since we want time range 2010 to 2021 we are going to splice it from the string. Example 2018-06-23 we will take the
         #2018 which is first 4 characters , cast to number, then compare if that value is in our range! else continue
         if int(row[5][0:4]) < 2010 or int(row[5][0:4]) > 2021: #so 2009 or 2022 would not show up
-            continue #Remove these two lines to disable dating limits
+            ignoretrials.add(row[0])
+            continue #Remove these three lines to disable dating limits
 
         toappend = False #becomes true when we find something with a matching NDD
         #Check diseases in disease section
@@ -48,8 +52,58 @@ with open("queries/chartsv4A.csv") as csv_file:
             for disease in jfc.diseaseinTitleChecked:
                 if disease in row[1]:
                     toappend = True
+
+        #check lowercase or any title stuff we missed
+        if (toappend == False):
+            for disease in jfc.diseaselowercase:
+                if disease in row[2].lower():
+                    toappend = True
+                    break
+
         if toappend:
             matchentries.append(row)
+            trialsSaved.add(row[0]) #save this nctid as a trial we want to save in pass #2
+
+#first pass we get all NCTIDs we want, second pass we want to do a check of NCTID we skipped that have relevant titles
+#to see if a trial has a NDD title but no mention of NDD
+reviewskipped = [] #stores all trials we may want to review because they containe NDD in title, but not in condition
+multiplereview = {} #Has Trial and conditions matched. Used to then find the ones that have more than 1 condition
+multiplereviewfinal = [] #NDD trials that contain multiple NDD in title. Higher priority to review!
+with open("queries/chartsv4A.csv") as csv_file:
+    csv_data = csv.reader(csv_file, delimiter=',')
+    for row in csv_data:
+        if row[0] not in trialsSaved and row[0] not in ignoretrials: #if we arent saving it and we arent ignoring it
+            for disease in jfc.diseaselowercase:
+                if disease in row[1].lower(): #to see if this catches anything
+                    reviewskipped.append([jfc.diseaseHashMap[disease],row[0],row[1],row[2],row[3],row[4]]) 
+                    if row[0] in multiplereview:
+                        multiplereview[row[0]].add(jfc.diseaseHashMap[disease])
+                    else:
+                        multiplereview[row[0]] = set([jfc.diseaseHashMap[disease]])
+print("Trials skipped with NDD in title, but not in Condition:", len(multiplereview)) #if we want to see skipped telemetry
+#search for any trials with multiple NDD in title
+for key in multiplereview:
+    if len(multiplereview[key]) > 1:
+        if len(multiplereview[key]) == 2 and 'MCI' in multiplereview[key] and 'AD' in multiplereview[key]:
+            continue #Skip MCI/AD pair
+        if len(multiplereview[key]) == 2 and 'MCI' in multiplereview[key] and 'PD' in multiplereview[key]:
+            continue #Skip MCI/PD pair
+        multiplereviewfinal.append([key, list(multiplereview[key])])
+if len(multiplereviewfinal) > 0:
+    reviewfinalmsg = "Trials skipped we may want to review:\n"
+    for row in multiplereviewfinal:
+        reviewfinalmsg += row[0]+": "+row[1][0]
+        for i in range(1,len(row[1])):
+            reviewfinalmsg += ", "+row[1][i]
+        reviewfinalmsg += "\n"
+    print(reviewfinalmsg) #If we want to see telemetry on any trials to review.
+
+sorted_reviewskipped = sorted(reviewskipped, key=lambda row: row[1], reverse=False) #sort by nctid
+#Write skipped trials to review
+with open('output/nddreviewskipped.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(sorted_reviewskipped)
+
 #print(matchentries)
 diseasechecked = []
 for entry in matchentries:
@@ -102,5 +156,59 @@ sorted_ndddesignoutcomes = sorted(ndddesignoutcomes, key=lambda row: row[0], rev
 with open('output/ndddesignoutcomes.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
     outfile.writerows(sorted_ndddesignoutcomes)
+
+#Next let's load the eligbility criteria for trials (chartsv4D)
+with open("queries/chartsv4D.csv") as csv_file:
+    csv_data = csv.reader(csv_file, delimiter=',')
+    for row in csv_data: #row[0] is nctid, row[1] is eligibility criteria text (big text)
+        if row[0] in ignoretrials:
+            continue #skip trials we are ignoring because they are out of search parameters (time range)
+        toappend = False #becomes true when we find something we want to save
+        #we need to only look in inclusion criteria so let's remove all text after the phrase
+        #"Exclusion Criteria:" appears in our string.
+        row1clean = row[1].lower()
+        if "inclusion/exclusion" not in row1clean:
+            row1clean = row1clean.split('exclusion criteria',1)[0]
+        condlist = [] #store conditions we find here
+        #Check each disease in disease section
+        for disease in jfc.diseaseLongChecked: #check standard names
+            if disease in row1clean: #if the text of a disease shows up
+                condlist.append(disease)
+                toappend = True
+                #break #Don't break so we can find more matches
+        #Check lowercase exceptions and some acronyms
+        if (toappend == False):
+            for disease in jfc.diseaselowercase:
+                if disease in row1clean.lower():
+                    condlist.append(disease)
+                    toappend = True
+        #Store the row if we flagged it as worthwhile
+        if toappend:
+            #Cleanup conditionlist.
+            clean_condlist = []
+            for c in condlist:
+                clean_condlist.append(jfc.diseaseHashMap[c])
+            nddeligibilities.append([row[0], len(condlist), ';'.join(clean_condlist) ,row[1] ])
+
+#sort the results by NCTID
+sorted_nddeligibilities = sorted(nddeligibilities, key=lambda row: row[0], reverse=False) #sort by nctid
+
+#Generate list of trials with more than 1 condition listed
+nddeligibilities_multicond = []
+for row in sorted_nddeligibilities: 
+    if row[1] > 1:
+        if row[1] == 2 and "AD" in row[2] and "MCI" in row[2]:
+                continue #2 conditions, skip if it is MCI/AD pair since we don't want it
+        if row[1] == 2 and "PD" in row[2] and "MCI" in row[2]:
+                continue #2 conditions, skip if it is MCI/PD pair since we don't want it    
+        nddeligibilities_multicond.append(row)
+
+#write trials with eligibilities to review
+with open('output/nddeligibilities.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(sorted_nddeligibilities)
+with open('output/nddeligibilitiesmulticond.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(nddeligibilities_multicond)
 
 #END CODE
