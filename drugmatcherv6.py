@@ -10,6 +10,7 @@ import csv
 matchentries = []       #chartsv4A study and other main components
 nddoutcomes = []        #chartsv4B outcomes
 ndddesignoutcomes = []  #chartsv4C design outcomes
+nddeligibilitiesmulticond = []   #chartsv4D eligibility criteria, but only rows with 2 or more NDD mentions
 
 finalentries = []
 
@@ -31,6 +32,11 @@ with open("output/ndddesignoutcomes.csv") as csv_file:
     csv_data = csv.reader(csv_file, delimiter=',')
     for row in csv_data:
         ndddesignoutcomes.append(row)
+
+with open("output/nddeligibilitiesmulticond.csv") as csv_file:
+    csv_data = csv.reader(csv_file, delimiter=',')
+    for row in csv_data:
+        nddeligibilitiesmulticond.append(row)
 
 # Row Contents of output/nddtrials.csv
 # Row[0] studies.nct_id
@@ -56,6 +62,10 @@ with open("output/ndddesignoutcomes.csv") as csv_file:
 # Row[1] design_outcomes.measure
 # Row[2] design_outcomes.time_frame
 # Row[3] design_outcomes.description
+
+# Row Contents of queries/chartsv4D.csv
+# Row[0] eligibilities.nct_id 
+# Row[1] eligibilities.criteria
 
 #GOAL: 
 #Drug Matched
@@ -93,6 +103,33 @@ for row in nddoutcomes:
 #Next let's go ahead and add the design_outcomes (to see if we can fill more info for empty spots)
 for row in ndddesignoutcomes:
     matchedCTO[row[0]].addDesignOutcomes(row[1],row[2],row[3])
+
+##########New Code for Eligibility Criteria
+#Next let's go ahead and add eligibility criteria for our trials and discover new trials worth looking at
+ematchedtrials = [] #Stores NCTID, Conditions, NDD listed in eligibility criteria text. We will need to check to make sure the
+                    #eligiblity criteria does not list any new conditions in this list that aren't already in conditions column
+enewtrials = [] #Stores NCTID and NDD list found in Eligiility Criteria of unmatched trials.
+for row in nddeligibilitiesmulticond:
+    if row[0] in matchedCTO:
+        matchedCTO[row[0]].addEligibilities(row[1]) #Add eligibilities to our objects in case we want to use it later
+        condlist = matchedCTO[row[0]].getConditionAcronymsStr()
+        #TODO write code to compare conditions to see if identical, if so don't add, as all is good.
+        ematchedtrials.append([row[0], condlist, str(row[2])]) #any trial added here we will want to process further*
+    else:
+        #TODO write code to get details of this trial 
+        enewtrials.append([row[0], str(row[2])]) #any trial added here we will need to get data from
+                                                 #the chartsv4 files and then process*
+#*further processing is to feed it through drugclassifier to see if it's a trial with a dx or sm drug.
+
+#write trials to review
+with open('output/ematchedtrials.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(ematchedtrials)
+with open('output/enewtrials.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(enewtrials)    
+
+##########End New Code for Eligibility Critera
 
 #Test to see if this worked
 #print(matchedCTO["NCT00620191"]) #For Testing the match from the table
