@@ -28,6 +28,13 @@ def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, ma
     tableSTEC1Final = jft.generateTableFromCTOsWithEC(jft.TableSTEC1Title, tableSTCTOsEC1) #Make Table
     jft.createCSVfromTable(tableSTEC1Final, "final-tables/NDDCrossTableSTEC1") #Create CSV with table
     jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableSTEC1") #Make hyperlinked version
+    #Next let's get all the data for the new trials which we need for 3
+
+    #TODO We are going to write code make a new csv with trials of interest
+    #Then we are going to load that up in drugmatcher and pass it to this function to build CTOs out of it
+    #Then once we have ctos we can just call above functions to generateTables and then save it to the
+    #tablesSTCTOsEC2 list below and then everything else should work automatically then and we will be
+    #done!
 
     tableSTCTOsEC2 = []   #TODO for 3)
     return tableSTCTOsEC1, tableSTCTOsEC2 #TODO second list
@@ -49,3 +56,5 @@ def buildtableSTCTOs(ec1matchedtrials, ec2matchedtrials, matchedCTO):
     #now that we have our list let's get our eligibility criteria version of Table 10 data basically.
     ectableSTCTOs = jft.generateCTOTableST(matchedNCTIDList, matchedCTO)
     return ectableSTCTOs
+
+#END CODE
