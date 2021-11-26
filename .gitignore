@@ -28,3 +28,8 @@ output/final-tables/hyperlinked/*
 !output/json-tables/
 output/json-tables/*
 !output/json-tables/README.md
+
+!output/eligibility-crtieria/
+output/eligibility-criteria/*
+!output/eligibility-criteria/README.md
+
