@@ -16,17 +16,21 @@
 #Imports
 import tablegeneration as jft
 
-#Parameters: These are 1,2,and3 from above comment. The last one is out matchedCTO objects useful for 1,2 checks
+#Parameters: These are 1,2,and3 from above comment. The fourth one is out matchedCTO objects useful for 1,2 checks.
 #ec1matchedtrials: Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text, and raw eligibility criteria text
 #ec2matchedtrials: Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text,
 #                  New NDD appearing in Elig Crit Text, and raw eligibility criteria text
 #ecnewtrials:      Stores NCTID, NDD listed in eligibility criteria text, and raw eligibility criteria text
 #matchedCTOS:      Clinical Trial Objects. All NDD trials in a beautifully formatted way. Useful for 1 and 2 checks.
 def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO): 
-    print("Running Eligibility Criteria Processor")
     #First let's build tableSTCTOs which we can use for 1 and 2. 
-    tableSTCTOs = buildtableSTCTOs(ec1matchedtrials,ec2matchedtrials, matchedCTO)
-    print(len(tableSTCTOs))
+    tableSTCTOsEC1 = buildtableSTCTOs(ec1matchedtrials,ec2matchedtrials, matchedCTO)
+    #tableSTFinal = jft.generateTableFromCTOsWithEC(jft.Table25Title, tableSTCTOsEC1)
+    #jft.createCSVfromTable(tableSTFinal, "final-tables/NDDCrossTable25")
+
+    #Next we just need to look at the intervention list and find our new additions of 1 and 2 #TODO
+    #TODO 3 as well
+    return tableSTCTOsEC1, [] #TODO second list
 
 def buildtableSTCTOs(ec1matchedtrials, ec2matchedtrials, matchedCTO):
     matchedNCTIDset = set() #We need a list of NCTIDs of Trials of interest. Set so we remove dups

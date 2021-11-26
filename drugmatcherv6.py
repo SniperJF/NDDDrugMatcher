@@ -161,7 +161,8 @@ for row in nddeligmulticond:
 #*further processing for ec1mmatchedtrials and ec2mmatchedtrials is to feed it through drugclassifier to see if 
 # it's a trial with a dx or sm drug. For ecnewtrials we want to take these NCTIDs and see if any of them are for drugs. 
 # But those I have to build CTOs first to be able to process. All of this I am going to do in the new file eligcritprocesser.py
-# However I need to get tableSTCTOs to be able to compare it and see what here is new. So gotta continue this code after....
+tableSTCTOsEC1, tableSTCTOsEC2 = eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO)
+
 
 #write trials to review
 with open('output/eligibility-criteria/ec1matchedtrials.csv', 'w', newline='') as csv_outfile:
@@ -239,9 +240,6 @@ jft.createCSVfromTable(tableSTFinal, "final-tables/NDDCrossTableST")
 #Create Hyperlinked version of NDDCrossTableST.csv
 jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableST")
 
-#New Code for Eligibility Criteria #See documentation above on why this is here.
-eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO, tableSTCTOs)
-#End New Code for Eligibility Criteria
 
 #TABLE IT MAIN CODE:
 #In this one we are looking for drugs that appear in more than 1 trial. First phase let's find exact match entries
