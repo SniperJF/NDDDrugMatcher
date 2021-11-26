@@ -128,11 +128,14 @@ for row in nddeligsinglecond:
     if row[0] in matchedCTO:   
         matchedCTO[row[0]].addEligibilities(row[1]) #Add eligibilities to our objects in case we want to use it later
         trialcondlist = set(matchedCTO[row[0]].getConditionAcronyms())
-        econdlist = set(row[2].split(';')) #split condition acronyms using the ; delimiter
-        #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
-        if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
-            newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
-            ec1matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #any trial added here we will want to process further*
+        #If the eligibility criteria NDD we found is already listed in our trial conditions then we don't need to include this
+        if row[2] not in trialcondlist: #otherwise we do as we found a NDD that went as unlisted!
+            #Let's add one more check to exclude AD/MCI and PD/MCI pairs since we classify that as the same condition.
+            if row[2] == 'MCI' and ('AD' in trialcondlist or 'PD' in trialcondlist):
+                continue #Don't add it, skip it MCI/AD or MCI/PD pair
+            if row[2] == 'AD' and len(trialcondlist) == 1 and 'MCI' in trialcondlist:
+                continue #Don't add it, skip it. MCI/AD or MCI/PD pair. Still may want to take a look at these later... #TODO
+            ec1matchedtrials.append([row[0], trialcondlist, row[2], str(row[3])]) #any trial added here we will want to process further*
     else:
         #since we are only worried about single trials we don't need to process this further. However when we do independent trials we
         #don't want to discard this trial just yet as we will want to look at the NDD listed and the intervention as a potential match
@@ -150,12 +153,11 @@ for row in nddeligmulticond:
             newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
             ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #any trial added here we will want to process further*
     else:
-        #TODO write code to get details of this trial 
-        ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #any trial added here we will need to get data from
-                                                 #the chartsv4 files to build the CTO and then process*
+        ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #these are new trials not listed as NDD trials. Very cool
 
-#*further processing for ec1mmatchedtrials and ec2 is to feed it through drugclassifier to see if it's a trial with a dx or sm drug.
-#For ecmatchedtrials we want to take these NCTIDs and see if any of them are for drugs.
+#*further processing for ec1mmatchedtrials and ec2mmatchedtrials is to feed it through drugclassifier to see if 
+# it's a trial with a dx or sm drug. For ecmatchedtrials we want to take these NCTIDs and see if any of them are for drugs. 
+# But those I have to build CTOs first to be able to process.
 
 #write trials to review
 with open('output/eligibility-criteria/ec1matchedtrials.csv', 'w', newline='') as csv_outfile:
