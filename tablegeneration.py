@@ -36,6 +36,23 @@ Table20Title   = ["Table 20.  Disease Modifying Drugs in single trials that incl
 TableITTitle  = ["Table IT.  All Intervention Matches in independent trials involving more than 1 neurodegenerative disorder."]
 TableSTTitle  = ["Table ST.  All Intervention Matches in single trials that included more than 1 neurodegenerative disorder."]
 
+#New Tables for Eligibility Criteria Matches
+Table21Title   = ["Table 21.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
+                  "Eligibility Criteria that do not appear in the Conditions."]
+Table22Title   = ["Table 22.  Disease Modifying Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
+                  "Eligibility Criteria that do not appear in the Conditions."]
+Table23Title   = ["Table 23.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+Table24Title   = ["Table 24.  Disease Modifying Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+Table25Title   = ["Table 25.  Non DM/SX Interventions in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
+                  "Eligibility Criteria that do not appear in the Conditions."]
+Table26Title   = ["Table 26.  Non DM/SX Interventions in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+
 ################## START FUNCTIONS ################## START FUNCTIONS ################## START FUNCTIONS ##################
 
 #Function that is same as generateTable2 but instead makes a list of the  CTO objects (good for further processing)
