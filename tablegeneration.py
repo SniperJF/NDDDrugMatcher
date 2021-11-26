@@ -79,6 +79,18 @@ def generateTableFromCTOs(tableTitle, CTOs):
                 FinalTable[-1][0] = entry.drugname #Save Matched Drug in first row
     return FinalTable
 
+#Modified pupper that has an extra column for Additional NDD in Eligibility Criteria
+def generateTableFromCTOsWithEC(tableTitle, CTOs):
+    columnTitles = ['Drug', 'Trial', 'Phase', 'Diagnosis', 'New NDD in Eligibility Criteria' ,'Number of Participants', 
+                    'Duration of Trial', 'Primary Outcome(s)', 'Biomarker Outcome(s)', 'Year Registered', 'Status']
+    FinalTable = [tableTitle, columnTitles]    
+    for entry in CTOs:
+        for i in range(len(entry.clinicalTrialList)):
+            FinalTable.append(entry.clinicalTrialList[i].generateTableRow(withEC=True)) #create first row of set
+            if i == 0: 
+                FinalTable[-1][0] = entry.drugname #Save Matched Drug in first row
+    return FinalTable
+
 def createCSVfromTable(tableName, fname):
     with open('output/' + fname + '.csv', 'w', newline='') as csv_outfile:
         outfile = csv.writer(csv_outfile)    
