@@ -193,8 +193,9 @@ with open("queries/chartsv4D.csv") as csv_file:
 #sort the results by NCTID
 sorted_nddeligibilities = sorted(nddeligibilities, key=lambda row: row[0], reverse=False) #sort by nctid
 
-#Generate list of trials with more than 1 condition listed
+#Generate list of trials with 1  condition or with more than 1 condition listed
 nddeligibilities_multicond = []
+nddeligibilities_singlecond = []
 for row in sorted_nddeligibilities: 
     if row[1] > 1:
         if row[1] == 2 and "AD" in row[2] and "MCI" in row[2]:
@@ -202,12 +203,18 @@ for row in sorted_nddeligibilities:
         if row[1] == 2 and "PD" in row[2] and "MCI" in row[2]:
                 continue #2 conditions, skip if it is MCI/PD pair since we don't want it    
         nddeligibilities_multicond.append(row)
+    else:
+        nddeligibilities_singlecond.append(row)
+
 
 #write trials with eligibilities to review
-with open('output/nddeligibilities.csv', 'w', newline='') as csv_outfile:
+with open('output/eligibility-criteria/nddeligcritall.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
     outfile.writerows(sorted_nddeligibilities)
-with open('output/nddeligibilitiesmulticond.csv', 'w', newline='') as csv_outfile:
+with open('output/eligibility-criteria/nddeligcritsinglecond.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(nddeligibilities_singlecond)
+with open('output/eligibility-criteria/nddeligcritmulticond.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
     outfile.writerows(nddeligibilities_multicond)
 

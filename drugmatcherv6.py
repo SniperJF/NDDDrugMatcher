@@ -10,7 +10,8 @@ import csv
 matchentries = []       #chartsv4A study and other main components
 nddoutcomes = []        #chartsv4B outcomes
 ndddesignoutcomes = []  #chartsv4C design outcomes
-nddeligibilitiesmulticond = []   #chartsv4D eligibility criteria, but only rows with 2 or more NDD mentions
+nddeligsinglecond = []  #chartsv4D Trials with 1 NDD mention in the Eligibility Criteria
+nddeligmulticond  = []  #chartsv4D Trials with 2 or more NDD mention in the Eligibility Criteria
 
 finalentries = []
 
@@ -33,10 +34,15 @@ with open("output/ndddesignoutcomes.csv") as csv_file:
     for row in csv_data:
         ndddesignoutcomes.append(row)
 
-with open("output/nddeligibilitiesmulticond.csv") as csv_file:
+with open("output/eligibility-criteria/nddeligcritsinglecond.csv") as csv_file:
     csv_data = csv.reader(csv_file, delimiter=',')
     for row in csv_data:
-        nddeligibilitiesmulticond.append(row)
+        nddeligsinglecond.append(row)
+
+with open("output/eligibility-criteria/nddeligcritmulticond.csv") as csv_file:
+    csv_data = csv.reader(csv_file, delimiter=',')
+    for row in csv_data:
+        nddeligmulticond.append(row)
 
 # Row Contents of output/nddtrials.csv
 # Row[0] studies.nct_id
@@ -66,6 +72,12 @@ with open("output/nddeligibilitiesmulticond.csv") as csv_file:
 # Row Contents of queries/chartsv4D.csv
 # Row[0] eligibilities.nct_id 
 # Row[1] eligibilities.criteria
+
+# Row Contents of output/eligibility-criteria/nddeligcritsinglecond.csv and nddeligcritmulticond.csv
+# Row[0] eligibilities.nct_id 
+# Row[1] Number of Identified NDD Acronyms
+# Row[2] NDD Acronym list separated by semi-colons.
+# Row[3] eligibilities.criteria (big text)
 
 #GOAL: 
 #Drug Matched
@@ -106,28 +118,55 @@ for row in ndddesignoutcomes:
 
 ##########New Code for Eligibility Criteria
 #Next let's go ahead and add eligibility criteria for our trials and discover new trials worth looking at
-ematchedtrials = [] #Stores NCTID, Conditions, NDD listed in eligibility criteria text. We will need to check to make sure the
-                    #eligiblity criteria does not list any new conditions in this list that aren't already in conditions column
-enewtrials = [] #Stores NCTID and NDD list found in Eligiility Criteria of unmatched trials.
-for row in nddeligibilitiesmulticond:
-    if row[0] in matchedCTO:
+ec1matchedtrials = [] #Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text, and raw eligibility criteria text
+ec2matchedtrials = [] #Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text,
+                      #New NDD appearing in Elig Crit Text, and raw eligibility criteria text
+ecnewtrials = [] #Stores NCTID, NDD listed in eligibility criteria text, and raw eligibility criteria text
+
+#First for single NDD in Eligibility Criteria
+for row in nddeligsinglecond:
+    if row[0] in matchedCTO:   
         matchedCTO[row[0]].addEligibilities(row[1]) #Add eligibilities to our objects in case we want to use it later
-        condlist = matchedCTO[row[0]].getConditionAcronymsStr()
-        #TODO write code to compare conditions to see if identical, if so don't add, as all is good.
-        ematchedtrials.append([row[0], condlist, str(row[2])]) #any trial added here we will want to process further*
+        trialcondlist = set(matchedCTO[row[0]].getConditionAcronyms())
+        econdlist = set(row[2].split(';')) #split condition acronyms using the ; delimiter
+        #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
+        if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
+            newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
+            ec1matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #any trial added here we will want to process further*
+    else:
+        #since we are only worried about single trials we don't need to process this further. However when we do independent trials we
+        #don't want to discard this trial just yet as we will want to look at the NDD listed and the intervention as a potential match
+        #candidate. For now we are good though. #TODO
+        pass
+
+#Next for multiple NDD listed in Eligility Criteria
+for row in nddeligmulticond:
+    if row[0] in matchedCTO:
+        matchedCTO[row[0]].addEligibilities(row[1]) #Add eligibilities to our objects in case we want to use it later (if not added already)
+        trialcondlist = set(matchedCTO[row[0]].getConditionAcronyms())
+        econdlist = set(row[2].split(';')) #split condition acronyms using the ; delimiter
+        #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
+        if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
+            newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
+            ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #any trial added here we will want to process further*
     else:
         #TODO write code to get details of this trial 
-        enewtrials.append([row[0], str(row[2])]) #any trial added here we will need to get data from
-                                                 #the chartsv4 files and then process*
-#*further processing is to feed it through drugclassifier to see if it's a trial with a dx or sm drug.
+        ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #any trial added here we will need to get data from
+                                                 #the chartsv4 files to build the CTO and then process*
+
+#*further processing for ec1mmatchedtrials and ec2 is to feed it through drugclassifier to see if it's a trial with a dx or sm drug.
+#For ecmatchedtrials we want to take these NCTIDs and see if any of them are for drugs.
 
 #write trials to review
-with open('output/ematchedtrials.csv', 'w', newline='') as csv_outfile:
+with open('output/eligibility-criteria/ec1matchedtrials.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
-    outfile.writerows(ematchedtrials)
-with open('output/enewtrials.csv', 'w', newline='') as csv_outfile:
+    outfile.writerows(ec1matchedtrials)
+with open('output/eligibility-criteria/ec2matchedtrials.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
-    outfile.writerows(enewtrials)    
+    outfile.writerows(ec2matchedtrials)
+with open('output/eligibility-criteria/ecnewtrials.csv', 'w', newline='') as csv_outfile:
+    outfile = csv.writer(csv_outfile)
+    outfile.writerows(ecnewtrials)    
 
 ##########End New Code for Eligibility Critera
 
