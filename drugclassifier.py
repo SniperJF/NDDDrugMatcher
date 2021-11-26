@@ -116,21 +116,22 @@ def createFinalTables(CTOsListIT, CTOsListST, CTOsListSTEC1, CTOsListSTEC2,
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table20Title, subCTOsListST["dm-drugs"]) ,    "final-tables/NDDCrossTable20")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table22Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable22")
 
-    #Eligibility Criteria Tables:
+    #Eligibility Criteria Flagged Tables:
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table21Title, CTOsListSTEC1["drugs"]) ,          "final-tables/NDDCrossTable21")
-
-    #TODO gotta write function to combine classes to write just 1 non-drug file for now.
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table22Title, CTOsListSTEC2["drugs"]) ,          "final-tables/NDDCrossTable22")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table23Title, CTOsListSTEC1["drugs"]) ,          "final-tables/NDDCrossTable23")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table24Title, CTOsListSTEC2["drugs"]) ,          "final-tables/NDDCrossTable24")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table26Title, subCTOsListSTEC2["sx-drugs"]) ,    "final-tables/NDDCrossTable26")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table28Title, subCTOsListSTEC2["dm-drugs"]) ,    "final-tables/NDDCrossTable28")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table30Title, subCTOsListSTEC2["unknownList"]) , "final-tables/NDDCrossTable30")
-    #TODO (placeholders for now)
-
+    nondrugsEC1 = (CTOsListSTEC1["biomarkers"]+CTOsListSTEC1["devices"]+CTOsListSTEC1["behaviors"]
+                  +CTOsListSTEC1["stemcells"]+CTOsListSTEC1["supplements"]+CTOsListSTEC1["deleteList"]+CTOsListSTEC1["unknownList"])
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table23Title, nondrugsEC1) ,                     "final-tables/NDDCrossTable23")
+    nondrugsEC2 = (CTOsListSTEC2["biomarkers"]+CTOsListSTEC2["devices"]+CTOsListSTEC2["behaviors"]
+                  +CTOsListSTEC2["stemcells"]+CTOsListSTEC2["supplements"]+CTOsListSTEC2["deleteList"]+CTOsListSTEC2["unknownList"])
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table24Title, nondrugsEC2) ,                     "final-tables/NDDCrossTable24")
+    #Subclassification for Eligibility Criteria Flagged Trials
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table25Title, subCTOsListSTEC1["sx-drugs"]) ,    "final-tables/NDDCrossTable25")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table27Title, subCTOsListSTEC1["dm-drugs"]) ,    "final-tables/NDDCrossTable27")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table29Title, subCTOsListSTEC1["unknownList"]) , "final-tables/NDDCrossTable29")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table26Title, subCTOsListSTEC2["sx-drugs"]) ,    "final-tables/NDDCrossTable26")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table28Title, subCTOsListSTEC2["dm-drugs"]) ,    "final-tables/NDDCrossTable28")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table30Title, subCTOsListSTEC2["unknownList"]) , "final-tables/NDDCrossTable30")
 
     #Create Hyperlinked Tables:
     for i in range(1,30+1): #30 because that's how many tables there are so far
