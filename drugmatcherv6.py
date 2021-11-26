@@ -2,6 +2,7 @@
 from common import jfc
 import tablegeneration as jft
 import drugclassifier as jfd
+from eligcritprocesser import eligibilitycritprocessor
 
 import csv
 
@@ -135,7 +136,7 @@ for row in nddeligsinglecond:
                 continue #Don't add it, skip it MCI/AD or MCI/PD pair
             if row[2] == 'AD' and len(trialcondlist) == 1 and 'MCI' in trialcondlist:
                 continue #Don't add it, skip it. MCI/AD or MCI/PD pair. Still may want to take a look at these later... #TODO
-            ec1matchedtrials.append([row[0], trialcondlist, row[2], str(row[3])]) #any trial added here we will want to process further*
+            ec1matchedtrials.append([row[0], trialcondlist, row[2], str(row[3])]) #we will want to process further*
     else:
         #since we are only worried about single trials we don't need to process this further. However when we do independent trials we
         #don't want to discard this trial just yet as we will want to look at the NDD listed and the intervention as a potential match
@@ -151,13 +152,14 @@ for row in nddeligmulticond:
         #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
         if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
             newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
-            ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #any trial added here we will want to process further*
+            ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #we will want to process further*
     else:
-        ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #these are new trials not listed as NDD trials. Very cool
+        ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #these are new trials not listed as NDD trials. Process further*
 
 #*further processing for ec1mmatchedtrials and ec2mmatchedtrials is to feed it through drugclassifier to see if 
-# it's a trial with a dx or sm drug. For ecmatchedtrials we want to take these NCTIDs and see if any of them are for drugs. 
-# But those I have to build CTOs first to be able to process.
+# it's a trial with a dx or sm drug. For ecnewtrials we want to take these NCTIDs and see if any of them are for drugs. 
+# But those I have to build CTOs first to be able to process. All of this I am going to do in the new file eligcritprocesser.py
+eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO)
 
 #write trials to review
 with open('output/eligibility-criteria/ec1matchedtrials.csv', 'w', newline='') as csv_outfile:
