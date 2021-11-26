@@ -55,7 +55,7 @@ def printTemetry(interventions):
     #print("Current Classes:", intClasses)
     print("Classifying into:")
     print("behaviors, biomarkers, drugs, devices, stemcells, supplements, delete,")
-    print("and unknown");
+    print("and unknown")
     for i in intClasses:
         if (i not in keyword_behaviors     and i not in keyword_biomarkers 
             and i not in keyword_drugs     and i not in keyword_device 
