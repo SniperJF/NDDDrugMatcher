@@ -136,6 +136,7 @@ for row in nddeligsinglecond:
                 continue #Don't add it, skip it MCI/AD or MCI/PD pair
             if row[2] == 'AD' and len(trialcondlist) == 1 and 'MCI' in trialcondlist:
                 continue #Don't add it, skip it. MCI/AD or MCI/PD pair. Still may want to take a look at these later... #TODO
+            matchedCTO[row[0]].addNDDInEligCriteria(row[2]) #Store NDD list for use later or for table printing
             ec1matchedtrials.append([row[0], trialcondlist, row[2], str(row[3])]) #we will want to process further*
     else:
         #since we are only worried about single trials we don't need to process this further. However when we do independent trials we
@@ -152,6 +153,7 @@ for row in nddeligmulticond:
         #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
         if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
             newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
+            matchedCTO[row[0]].addNDDInEligCriteria(row[2]) #Store NDD list for use later or for table printing
             ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #we will want to process further*
     else:
         ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #these are new trials not listed as NDD trials. Process further*

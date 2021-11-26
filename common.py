@@ -168,7 +168,7 @@ class jfc:
             self.outcomeTitle = [] #we will add these later
             self.outcomeDescription = [] #we will add these later
             self.eligibilityCriteria = [] #we optionally can add these later
-            self.nddInEligCriteria = [] #we optionally can add these later, if any
+            self.nddInEligCriteria = [] #we optionally can add these later, if any, only stores NDD that dont appear already in conditions
             self.addCondition(condition)
             self.addInterventions(intervention, 0)
             self.addInterventions(otherIntervention, 1)
@@ -200,9 +200,14 @@ class jfc:
         def addEligibilityCriteria(self, e):
             if e not in self.eligibilityCriteria:
                 self.eligibilityCriteria.append(e)
-        def addNDDInEligCriteria(self, e):
-            if e not in self.nddInEligCriteria:
-                self.nddInEligCriteria.append(e)
+        def addNDDInEligCriteria(self, nddlist): #Note this only stores clean version, aka not NDD that appear in cond already
+            if isinstance(nddlist, list):
+                for ndd in nddlist: #list of them try to insert one at a time
+                    if ndd not in self.nddInEligCriteria:
+                        self.nddInEligCriteria.append(ndd)
+            else: #not a list, single NDD so try to insert it directly
+                if nddlist not in self.nddInEligCriteria:
+                    self.nddInEligCriteria.append(nddlist)
         def getShortPhase(self):
             return self.phase.replace("Phase ", "P") #for our table appearance
         def getShortTimeFrame(self):
@@ -233,6 +238,14 @@ class jfc:
                     for i in range(1,len(condlist)):
                         finalstring += ", " + condlist[i] #for comma to look nice
             return finalstring
+        def getNDDInEligCriteriaStr(self): #Returns string version of nddInEligCriteria
+            finalstring = ""
+            if len(self.nddInEligCriteria) > 0:
+                finalstring = self.nddInEligCriteria[0]
+                if len(self.nddInEligCriteria) > 1:
+                    for i in range(1, len(self.nddInEligCriteria)):
+                        finalstring += ", " + self.nddInEligCriteria[i] #for comma to look nice
+            return finalstring
         def getComboStatus(self): #Function that returns the fancy YEAR; Status from table
             return str(self.getOnlyDateYear(self.lastpostedDate)) + "; " + self.studyStatus
         def getTablePrimaryOutcomeStr(self): #makes string with the outcome titles separated by a ;
@@ -253,13 +266,16 @@ class jfc:
             #may be able to use the outcomes.descriptions to do this at some point
             finalstr = ""
             return finalstr
-        def generateTableRow(self): #Returns formatted list representing csv entry to fill out, leaves drug/match space blank
+        def generateTableRow(self, withEC=False): #Returns formatted list representing csv entry to fill out, leaves drug/match space blank
+            #The default parameter withEC can be set to True in call to print out extra column of NDD in Eligbility Criteria.
             finalrow = [] #We will return a 1 dimensional list
             finalrow.append("") #column[0] is empty, I'll either keep empty for formatting or I'll add drug match if it's the first of a set
             finalrow.append(self.nctid) #column[1] is NCTID  (this is all coming from Cross NDD worksheet Dr. Cummings sent as template)
             finalrow.append(self.getShortPhase()) #column[2] is the Phase but shortened
             finalrow.append(self.getConditionAcronymsStr()) #column[3] is the Diagnosis, AKA condition. 
             #Acronym isnt very reliable so instead used the condition name, but can revisit acronym at some point
+            if withEC: #This is optional column only added if withEC enabled
+                finalrow.append(self.getNDDInEligCriteriaStr())
             finalrow.append(self.enrollment) #column[4] Number of participants
             finalrow.append(self.getShortTimeFrame()) #column[5] Duration of Trial
             finalrow.append(self.getTablePrimaryOutcomeStr()) #column[6] Primary Outcome(s)
