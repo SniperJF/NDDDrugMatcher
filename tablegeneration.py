@@ -35,23 +35,40 @@ Table20Title   = ["Table 20.  Disease Modifying Drugs in single trials that incl
 #These are aggregate tables for reference only
 TableITTitle  = ["Table IT.  All Intervention Matches in independent trials involving more than 1 neurodegenerative disorder."]
 TableSTTitle  = ["Table ST.  All Intervention Matches in single trials that included more than 1 neurodegenerative disorder."]
+TableSTEC1Title  = ["Table STEC1.  All Intervention Matches in single trials that included more than 1 neurodegenerative " +
+                    "disorder by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
+                    "Eligibility Criteria that do not appear in the Conditions."]
+TableSTEC2Title  = ["Table STEC2.  All Intervention Matches in single trials that included more than 1 neurodegenerative disorder " +
+                    "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
 
 #New Tables for Eligibility Criteria Matches
-Table21Title   = ["Table 21.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder " +
+Table21Title   = ["Table 21.  Drugs in single trials that included more than 1 neurodegenerative disorder " +
                   "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
                   "Eligibility Criteria that do not appear in the Conditions."]
-Table22Title   = ["Table 22.  Disease Modifying Drugs in single trials that included more than 1 neurodegenerative disorder " +
+Table22Title   = ["Table 22.  Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+Table23Title   = ["Table 23.  Non-Drug Interventions in single trials that included more than 1 neurodegenerative disorder " +
                   "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
                   "Eligibility Criteria that do not appear in the Conditions."]
-Table23Title   = ["Table 23.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder " +
+Table24Title   = ["Table 24.  Non-Drug Interventions in single trials that included more than 1 neurodegenerative disorder " +
                   "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
-Table24Title   = ["Table 24.  Disease Modifying Drugs in single trials that included more than 1 neurodegenerative disorder " +
-                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
-Table25Title   = ["Table 25.  Non DM/SX Interventions in single trials that included more than 1 neurodegenerative disorder " +
+#Subclasses for Eligibility Criteria Matches:
+Table25Title   = ["Table 25.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder " +
                   "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
                   "Eligibility Criteria that do not appear in the Conditions."]
-Table26Title   = ["Table 26.  Non DM/SX Interventions in single trials that included more than 1 neurodegenerative disorder " +
+Table26Title   = ["Table 26.  Disease Modifying Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
+                  "Eligibility Criteria that do not appear in the Conditions."]
+Table27Title   = ["Table 27.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder " +
                   "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+Table28Title   = ["Table 28.  Disease Modifying Drugs in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+Table29Title   = ["Table 29.  Unknown Intervention Subclass in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having at least one NDD listed as a Condition and by having one or more NDD listed in the " +
+                  "Eligibility Criteria that do not appear in the Conditions."]
+Table30Title   = ["Table 30.  Unknown Intervention Subclass in single trials that included more than 1 neurodegenerative disorder " +
+                  "by having no NDD listed as Condition, but having one or more NDD listed in the Eligibility Criteria."]
+
 
 ################## START FUNCTIONS ################## START FUNCTIONS ################## START FUNCTIONS ##################
 

@@ -54,24 +54,36 @@ def readClassifierFiles(): #NEW
     subdrugClassifiers["dm-drugs"] = readFileAsSet("input/classifiers/dm-subclass.txt")   
     return drugClassifiers, subdrugClassifiers
 
-def printClassifiedCTOs(CTOsList1, CTOsList2, subCTOsList1, subCTOsList2):
-    if len(CTOsList1) != 8 or len(CTOsList2) != 8:
-        print("Error: printClassifidCTOs: CTosLists not correct size") #Four Groups
+def printClassifiedCTOs(CTOsList1, CTOsList2, CTOsList3, CTOsList4, subCTOsList1, subCTOsList2, subCTOsList3, subCTOsList4):
+    if len(CTOsList1) != 8 or len(CTOsList2) != 8 or len(CTOsList3) != 8 or len(CTOsList4) != 8:
+        print("Error: printClassifidCTOs: CTosLists not correct size") #Eight Groups
         return
-    printAllInterventions(CTOsList1["drugs"]+CTOsList2["drugs"],             "classified-tables/drugs")
-    printAllInterventions(CTOsList1["biomarkers"]+CTOsList2["biomarkers"],   "classified-tables/biomarkers")
-    printAllInterventions(CTOsList1["devices"]+CTOsList2["devices"],         "classified-tables/devices")
-    printAllInterventions(CTOsList1["behaviors"]+CTOsList2["behaviors"],     "classified-tables/behaviors")
-    printAllInterventions(CTOsList1["stemcells"]+CTOsList2["stemcells"],     "classified-tables/stemcells")
-    printAllInterventions(CTOsList1["supplements"]+CTOsList2["supplements"], "classified-tables/supplements")
-    printAllInterventions(CTOsList1["deleteList"]+CTOsList2["deleteList"],   "classified-tables/deleteList")
-    printAllInterventions(CTOsList1["unknownList"]+CTOsList2["unknownList"], "classified-tables/unknownList")
+    printAllInterventions(CTOsList1["drugs"]+CTOsList2["drugs"]+
+                          CTOsList3["drugs"]+CTOsList4["drugs"],             "classified-tables/drugs")
+    printAllInterventions(CTOsList1["biomarkers"]+CTOsList2["biomarkers"]+
+                          CTOsList3["biomarkers"]+CTOsList4["biomarkers"],   "classified-tables/biomarkers")
+    printAllInterventions(CTOsList1["devices"]+CTOsList2["devices"]+
+                          CTOsList3["devices"]+CTOsList4["devices"],         "classified-tables/devices")
+    printAllInterventions(CTOsList1["behaviors"]+CTOsList2["behaviors"]+
+                          CTOsList3["behaviors"]+CTOsList4["behaviors"],     "classified-tables/behaviors")
+    printAllInterventions(CTOsList1["stemcells"]+CTOsList2["stemcells"]+
+                          CTOsList3["stemcells"]+CTOsList4["stemcells"],     "classified-tables/stemcells")
+    printAllInterventions(CTOsList1["supplements"]+CTOsList2["supplements"]+
+                          CTOsList3["supplements"]+CTOsList4["supplements"], "classified-tables/supplements")
+    printAllInterventions(CTOsList1["deleteList"]+CTOsList2["deleteList"]+
+                          CTOsList3["deleteList"]+CTOsList4["deleteList"],   "classified-tables/deleteList")
+    printAllInterventions(CTOsList1["unknownList"]+CTOsList2["unknownList"]+
+                          CTOsList3["unknownList"]+CTOsList4["unknownList"], "classified-tables/unknownList")
 
-    printAllInterventions(subCTOsList1["sx-drugs"]+subCTOsList2["sx-drugs"], "classified-tables/sx-drugs")
-    printAllInterventions(subCTOsList1["dm-drugs"]+subCTOsList2["dm-drugs"], "classified-tables/dm-drugs")
-    printAllInterventions(subCTOsList1["unknownList"]+subCTOsList2["unknownList"], "classified-tables/unknownList-subclass")
+    printAllInterventions(subCTOsList1["sx-drugs"]+subCTOsList2["sx-drugs"]+
+                          subCTOsList3["sx-drugs"]+subCTOsList4["sx-drugs"], "classified-tables/sx-drugs")
+    printAllInterventions(subCTOsList1["dm-drugs"]+subCTOsList2["dm-drugs"]+
+                          subCTOsList3["dm-drugs"]+subCTOsList4["dm-drugs"], "classified-tables/dm-drugs")
+    printAllInterventions(subCTOsList1["unknownList"]+subCTOsList2["unknownList"]+
+                          subCTOsList3["unknownList"]+subCTOsList4["unknownList"], "classified-tables/unknownList-subclass")
 
-def createFinalTables(CTOsListIT, CTOsListST, subCTOsListIT, subCTOsListST):
+def createFinalTables(CTOsListIT, CTOsListST, CTOsListSTEC1, CTOsListSTEC2, 
+                      subCTOsListIT, subCTOsListST, subCTOsListSTEC1, subCTOsListSTEC2):
     if len(CTOsListIT) != 8 or len(CTOsListST) != 8: #we want 4 groups
         print("Error: createFinalTables:  CTosLists not correct size")
         return    
@@ -86,7 +98,7 @@ def createFinalTables(CTOsListIT, CTOsListST, subCTOsListIT, subCTOsListST):
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table15Title, CTOsListIT["unknownList"]) , "final-tables/NDDCrossTable15")
 
     #Single Trial Tables
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table2Title,  CTOsListST["drugs"]) ,       "final-tables/NDDCrossTable2")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table2Title,  CTOsListST["drugs"]) ,       "final-tables/NDDCrossTable2")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table4Title,  CTOsListST["biomarkers"]) ,  "final-tables/NDDCrossTable4")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table6Title,  CTOsListST["devices"]) ,     "final-tables/NDDCrossTable6")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table8Title,  CTOsListST["behaviors"]) ,   "final-tables/NDDCrossTable8")
@@ -100,12 +112,28 @@ def createFinalTables(CTOsListIT, CTOsListST, subCTOsListIT, subCTOsListST):
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table19Title, subCTOsListIT["dm-drugs"]) ,    "final-tables/NDDCrossTable19")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table21Title, subCTOsListIT["unknownList"]) , "final-tables/NDDCrossTable21")    
     #Subclassification Tables Single Trials
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table18Title, subCTOsListST["sx-drugs"]) ,    "final-tables/NDDCrossTable18")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table20Title, subCTOsListST["dm-drugs"]) ,    "final-tables/NDDCrossTable20")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table18Title, subCTOsListST["sx-drugs"]) ,    "final-tables/NDDCrossTable18")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table20Title, subCTOsListST["dm-drugs"]) ,    "final-tables/NDDCrossTable20")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table22Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable22")
 
+    #Eligibility Criteria Tables:
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table21Title, CTOsListSTEC1["drugs"]) ,          "final-tables/NDDCrossTable21")
+
+    #TODO gotta write function to combine classes to write just 1 non-drug file for now.
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table22Title, CTOsListSTEC2["drugs"]) ,          "final-tables/NDDCrossTable22")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table23Title, CTOsListSTEC1["drugs"]) ,          "final-tables/NDDCrossTable23")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table24Title, CTOsListSTEC2["drugs"]) ,          "final-tables/NDDCrossTable24")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table26Title, subCTOsListSTEC2["sx-drugs"]) ,    "final-tables/NDDCrossTable26")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table28Title, subCTOsListSTEC2["dm-drugs"]) ,    "final-tables/NDDCrossTable28")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table30Title, subCTOsListSTEC2["unknownList"]) , "final-tables/NDDCrossTable30")
+    #TODO (placeholders for now)
+
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table25Title, subCTOsListSTEC1["sx-drugs"]) ,    "final-tables/NDDCrossTable25")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table27Title, subCTOsListSTEC1["dm-drugs"]) ,    "final-tables/NDDCrossTable27")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table29Title, subCTOsListSTEC1["unknownList"]) , "final-tables/NDDCrossTable29")
+
     #Create Hyperlinked Tables:
-    for i in range(1,23):
+    for i in range(1,30+1): #30 because that's how many tables there are so far
         jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTable"+str(i))
 
 #Function classifies all CTOs into independent groups and returns a list of CTOs
@@ -283,11 +311,11 @@ def classifyCTOs(CTOs, drugClassifiers, subClassifiers):
 #drugclassifier main function to separate intervention matched into groups like non-drug
 #disease-modifying drug, biomarkers, devices etc... for both CTOs: 
 # CTOsIT (Independent Trials) and CTOsST (Single Trials)
-def runDrugClassifier(CTOsIT, CTOsST):
+def runDrugClassifier(CTOsIT, CTOsST,  CTOsSTEC1, CTOsSTEC2):
 
     #First let's save all interventions into a file and call it allinterventions
     #This is pre removal of anything
-    printAllInterventions(CTOsIT+CTOsST, "classified-tables/all-interventions")
+    printAllInterventions(CTOsIT+CTOsST+CTOsSTEC1+CTOsSTEC2, "classified-tables/all-interventions")
 
     #next, load all text files to use to separate items
     drugClassifiers, subclassifiers = readClassifierFiles()
@@ -295,17 +323,21 @@ def runDrugClassifier(CTOsIT, CTOsST):
     #Do classification and return a list of 3 CTOs sets classified
     classifiedCTOsListIT, subclassifiedCTOsListIT, unclassified1 = classifyCTOs(CTOsIT, drugClassifiers, subclassifiers)
     classifiedCTOsListST, subclassifiedCTOsListST, unclassified2 = classifyCTOs(CTOsST, drugClassifiers, subclassifiers)
-    unclassified = unclassified1.union(unclassified2)
+    classifiedCTOsListSTEC1, subclassifiedCTOsListSTEC1, unclassified3 = classifyCTOs(CTOsSTEC1, drugClassifiers, subclassifiers)
+    classifiedCTOsListSTEC2, subclassifiedCTOsListSTEC2, unclassified4 = classifyCTOs(CTOsSTEC2, drugClassifiers, subclassifiers)
+    unclassified = unclassified1.union(unclassified2).union(unclassified3).union(unclassified4)
 
     #Create a list with all the unclassified so we can improve later
     if len(unclassified1) != 0:
         jfc.writeListToFileSorted(unclassified, "output/classified-tables/", "unclassified-interventions")
 
     #create output files to be used for verification
-    printClassifiedCTOs(classifiedCTOsListIT, classifiedCTOsListST, subclassifiedCTOsListIT, subclassifiedCTOsListST)
+    printClassifiedCTOs(classifiedCTOsListIT, classifiedCTOsListST, classifiedCTOsListSTEC1, classifiedCTOsListSTEC2,
+                        subclassifiedCTOsListIT, subclassifiedCTOsListST, subclassifiedCTOsListSTEC1, subclassifiedCTOsListSTEC2)
 
     #finally let's create our final tables as CSV
-    createFinalTables(classifiedCTOsListIT, classifiedCTOsListST, subclassifiedCTOsListIT, subclassifiedCTOsListST)
+    createFinalTables(classifiedCTOsListIT, classifiedCTOsListST, classifiedCTOsListSTEC1, classifiedCTOsListSTEC2,
+                      subclassifiedCTOsListIT, subclassifiedCTOsListST, subclassifiedCTOsListSTEC1, subclassifiedCTOsListSTEC1)
 
 #END CODE
 

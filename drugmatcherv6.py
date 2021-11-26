@@ -351,7 +351,8 @@ jft.makeJSONFromCTOsList(tableITCTOs, 1)
 jft.makeJSONFromCTOsList(tableSTCTOs, 2)
 
 #Next we run drugclassifier to separate intervention matched into groups like non-drug, 
-#disease-modifying drug, biomarkers, devices etc... for both CTOs 
-jfd.runDrugClassifier(tableITCTOs, tableSTCTOs) #IT is Independent Trials, ST is single trials
+#disease-modifying drug, biomarkers, devices etc... for all CTOs  (ST, IT, and STECs)
+#IT is Independent Trials, ST is single trials, EC is Eligibility Criteria
+jfd.runDrugClassifier(tableITCTOs, tableSTCTOs, tableSTCTOsEC1, tableSTCTOsEC2) 
 
-#END OF PROGRAM. CREATED BY JORGE FONSECA AND SAM BLACK
+#END OF PROGRAM. CREATED BY JORGE FONSECA
