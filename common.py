@@ -167,7 +167,8 @@ class jfc:
             self.studyStatus = studyStatus
             self.outcomeTitle = [] #we will add these later
             self.outcomeDescription = [] #we will add these later
-            self.eligibilities = [] #we optionally can add these later
+            self.eligibilityCriteria = [] #we optionally can add these later
+            self.nddInEligCriteria = [] #we optionally can add these later, if any
             self.addCondition(condition)
             self.addInterventions(intervention, 0)
             self.addInterventions(otherIntervention, 1)
@@ -196,9 +197,12 @@ class jfc:
                 self.designMeasures.append(dMeasure)
             if dDescription not in self.designDescription:
                 self.designDescription.append(dDescription)
-        def addEligibilities(self, e):
-            if e not in self.eligibilities:
-                self.eligibilities.append(e)
+        def addEligibilityCriteria(self, e):
+            if e not in self.eligibilityCriteria:
+                self.eligibilityCriteria.append(e)
+        def addNDDInEligCriteria(self, e):
+            if e not in self.nddInEligCriteria:
+                self.nddInEligCriteria.append(e)
         def getShortPhase(self):
             return self.phase.replace("Phase ", "P") #for our table appearance
         def getShortTimeFrame(self):
@@ -308,10 +312,10 @@ class jfc:
                         printstr += "Description: " + self.outcomeDescription[i] + "\n"
             else:
                 printstr += "No Outcomes Listed.\n"
-            #Currently we do not print eligibilities, if we want to we can uncomment this to print them
-            #if len(self.eligibilities) > 0:
+            #Currently we do not print eligibility criteria, if we want to we can uncomment this to print them
+            #if len(self.eligibilityCriteria) > 0:
             #    printstr += "Eligibility Criteria: "
-            #    for e in self.eligibilities:
+            #    for e in self.eligibilityCriteria:
             #        printstr += str(e)
             return printstr
     #End clinicalTrial class
