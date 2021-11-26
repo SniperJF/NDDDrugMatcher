@@ -333,6 +333,9 @@ class jfc:
             #    printstr += "Eligibility Criteria: "
             #    for e in self.eligibilityCriteria:
             #        printstr += str(e)
+            if len(self.nddInEligCriteria) > 0: #For NDD in Eligibility Criteria
+                printstr += "NDD Listed in Eligibility Criteria that do not appear in Condition(s):\n"
+                printstr += self.getNDDInEligCriteriaStr() + "\n"
             return printstr
     #End clinicalTrial class
     class drugClinicalTrialSet: #Class I use instead of a dictionary for Tables 1 and 3

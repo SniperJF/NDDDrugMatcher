@@ -117,7 +117,7 @@ for row in nddoutcomes:
 for row in ndddesignoutcomes:
     matchedCTO[row[0]].addDesignOutcomes(row[1],row[2],row[3])
 
-##########New Code for Eligibility Criteria
+#New Code for Eligibility Criteria
 #Next let's go ahead and add eligibility criteria for our trials and discover new trials worth looking at
 ec1matchedtrials = [] #Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text, and raw eligibility criteria text
 ec2matchedtrials = [] #Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text,
@@ -153,7 +153,7 @@ for row in nddeligmulticond:
         #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
         if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
             newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
-            matchedCTO[row[0]].addNDDInEligCriteria(row[2]) #Store NDD list for use later or for table printing
+            matchedCTO[row[0]].addNDDInEligCriteria(list(newndds)) #Store NDD list for use later or for table printing
             ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #we will want to process further*
     else:
         ecnewtrials.append([row[0], set(row[2].split(';')), row[3]]) #these are new trials not listed as NDD trials. Process further*
@@ -161,7 +161,7 @@ for row in nddeligmulticond:
 #*further processing for ec1mmatchedtrials and ec2mmatchedtrials is to feed it through drugclassifier to see if 
 # it's a trial with a dx or sm drug. For ecnewtrials we want to take these NCTIDs and see if any of them are for drugs. 
 # But those I have to build CTOs first to be able to process. All of this I am going to do in the new file eligcritprocesser.py
-eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO)
+# However I need to get tableSTCTOs to be able to compare it and see what here is new. So gotta continue this code after....
 
 #write trials to review
 with open('output/eligibility-criteria/ec1matchedtrials.csv', 'w', newline='') as csv_outfile:
@@ -173,8 +173,7 @@ with open('output/eligibility-criteria/ec2matchedtrials.csv', 'w', newline='') a
 with open('output/eligibility-criteria/ecnewtrials.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
     outfile.writerows(ecnewtrials)    
-
-##########End New Code for Eligibility Critera
+#End New Code for Eligibility Critera
 
 #Test to see if this worked
 #print(matchedCTO["NCT00620191"]) #For Testing the match from the table
@@ -240,6 +239,9 @@ jft.createCSVfromTable(tableSTFinal, "final-tables/NDDCrossTableST")
 #Create Hyperlinked version of NDDCrossTableST.csv
 jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableST")
 
+#New Code for Eligibility Criteria #See documentation above on why this is here.
+eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO, tableSTCTOs)
+#End New Code for Eligibility Criteria
 
 #TABLE IT MAIN CODE:
 #In this one we are looking for drugs that appear in more than 1 trial. First phase let's find exact match entries
