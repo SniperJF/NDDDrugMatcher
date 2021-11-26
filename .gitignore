@@ -19,6 +19,10 @@ output/*
 output/classified-tables/*
 !output/classified-tables/README.md
 
+!output/eligibility-criteria/
+output/eligibility-criteria/*
+!output/eligibility-criteria/README.md
+
 !output/final-tables/
 output/final-tables/*
 !output/final-tables/hyperlinked
@@ -28,8 +32,4 @@ output/final-tables/hyperlinked/*
 !output/json-tables/
 output/json-tables/*
 !output/json-tables/README.md
-
-!output/eligibility-crtieria/
-output/eligibility-criteria/*
-!output/eligibility-criteria/README.md
 
