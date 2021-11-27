@@ -124,10 +124,24 @@ ec2matchedtrials = [] #Stores NCTID, Trial Condition List, NDD listed in eligibi
                       #New NDD appearing in Elig Crit Text, and raw eligibility criteria text
 ecnewtrials = [] #Stores NCTID, NDD listed in eligibility criteria text, and raw eligibility criteria text
 
+#We need this here to add exclusion trials that we want to not add NDD for
+exclusionSet = set()
+f = open("input/classifiers/eligCritExcl.txt", "r")
+next(f) #skip first line
+for line in f:
+    try:
+        nctid = line.partition(";")[0]
+        exclusionSet.add(nctid)
+    except:
+        print("Warning Could not Extract an NCTID from eligCritExcl.txt!")
+f.close()
+
 #First for single NDD in Eligibility Criteria
 for row in nddeligsinglecond:
     if row[0] in matchedCTO:   
         matchedCTO[row[0]].addEligibilityCriteria(row[1]) #Add eligibilities to our objects in case we want to use it later
+        if row[0] in exclusionSet:
+            continue #skip this with manual skip
         trialcondlist = set(matchedCTO[row[0]].getConditionAcronyms())
         #If the eligibility criteria NDD we found is already listed in our trial conditions then we don't need to include this
         if row[2] not in trialcondlist: #otherwise we do as we found a NDD that went as unlisted!
@@ -149,6 +163,8 @@ for row in nddeligsinglecond:
 #Next for multiple NDD listed in Eligility Criteria
 for row in nddeligmulticond:
     if row[0] in matchedCTO:
+        if row[0] in exclusionSet:
+            continue #skip this with manual skip
         matchedCTO[row[0]].addEligibilityCriteria(row[1]) #Add eligibilities to our objects in case we want to use it later (if not added already)
         trialcondlist = set(matchedCTO[row[0]].getConditionAcronyms())
         econdlist = set(row[2].split(';')) #split condition acronyms using the ; delimiter
