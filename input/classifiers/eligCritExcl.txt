@@ -33,3 +33,7 @@ NCT02494024; PD excluded
 NCT01397539; DLB excluded
 NCT00076492; PSP excluded
 NCT03739814; PD excluded
+NCT04287829; PD and AD not present
+NCT03021486; PD, AD excluded
+NCT01597518; AD, PD excluded
+NCT00751101; AD, PD excluded
