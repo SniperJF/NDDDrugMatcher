@@ -299,6 +299,18 @@ def classifyCTOs(CTOs, drugClassifiers, subClassifiers):
                         classified_success = True
                         if i == "drugs":
                             print("Verify:", intervention+":", drugName)
+                            #let's try to add to a drug subclass
+                            subclassified_success = False
+                            already_inserted_list = []
+                            for dname in splitdrugName:
+                                for i in subClassifiers: #Iterate through all the keys
+                                    if i not in already_inserted_list and dname in subClassifiers[i]:
+                                        subclassified_success = True #we found a match on the substring 
+                                        subclassifiedCTOs[i].append(entry)
+                                        already_inserted_list.append(i) #So we dont insert something twice if it has 2 sx
+                                        break
+                            if not subclassified_success:
+                                subclassifiedCTOs["unknownList"].append(entry)
                         break #so we stop checking for this drug
                 if classified_success: #If we found a match in previous class
                     break #movie on to next CTO
