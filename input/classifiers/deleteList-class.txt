@@ -125,3 +125,63 @@ prevalence of behavioural dysexecutive syndrome
 saline
 saline solution
 sugar pill
+########Temporarily Deleting all Non-Drugs until we classify the below with more detail########
+18-FDTBZ
+3D gait analysis
+AAV2-GDNF gene therapy
+Amniotic and Umbilical Cord Tissue Procedure
+Ankle foot orthosis
+Anterior cingulate cortex activation, Primary auditory cortex activation
+Assessments
+Brain Computer Interface Keyboard
+CBT group
+CT
+CareHeroes
+CoRe software
+Convection enhanced delivery/AAV2-GDNF
+Conventional
+Cycling
+Cytology and Immunohistochemistry
+Data set as defined by the ERN Research Workgroup of the European Commission
+Day care for patients with dementia
+Driving an electric wheelchair in real condition, Driving an electric wheelchair in virtual condition
+Dual mobility implant, Traditional, Single-bearing hip implant
+Exenatide Pen Injector [Bydureon]
+Exergaming
+F18-AV45
+Four Square Step Test
+Fresh Frozen Plasma
+GE-REACH-program
+Genetic study of ALS families
+Heating pad
+Hippotherapy
+Intracerebral microinjections
+Kinesiotaping
+LeSCoD scale
+Levodopa test, determination of objective and subjective pain threshold
+Lokomat
+MP Diagnostics HTLV Blot 2.4
+MicRNAs battery kits
+Microbiome specimens in stool
+Montessori reading roundtable, Usual reading
+Motion Analysis
+Neuromodulation
+Neurosleeve
+Overminus treatment, Non-overminus treatment
+Passive heat stress
+Phonological, Orthographic, Semantic, Lexical, Untrained
+PoNS Treatment
+Psycho-behavioural assessment
+SBP English, SBP SPANISH
+Scale vaidation
+Therapist LEAP session feedback, Participant LEAP session feedback
+Web-based Survey
+oculomotor measurements
+biopsies of colon
+cerebrospinal fluid
+conventional therapy
+cough airflow measure, vocal tasks, true vocal fold movement, spirometry test, maximum expiratory pressure (MEP)
+eM2M
+enhanced olfactory stimuli
+low level laser therapy
+powered orthosis

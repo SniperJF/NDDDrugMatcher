@@ -1,3 +1,4 @@
+96 mg of K0706, 192 mg K0706
 AB1010
 ABBV-8E12
 ABT-957
@@ -7,6 +8,7 @@ ACP-103
 AFFITOPE® PD01A + Adjuvant
 AFQ056
 AGB101 220 mg tablet
+AKST4290
 AL-108
 AMX0035
 ANAVEX2-73
@@ -19,8 +21,10 @@ AZD5213
 Abilify
 Actos
 Adjuvant without active component
+Aducanumab
 Albutein 5%
 Allopregnanolone injection (intravenous solution)
+Amantadine
 Ambroxol
 Apidra
 Apomorphine
@@ -29,7 +33,10 @@ Armodafinil
 Artificial CSF
 Atomoxetine
 Azilect
+BIIB037
+BIIB076
 BIIB092
+BIIB101
 Bacteriostatic saline
 Blarcamesine
 Bromocriptine
@@ -59,6 +66,7 @@ DNL747
 Dabigatran
 Dasatinib
 Dasatinib + Quercetin
+Davunetide
 Deferiprone
 Deferiprone 600mg delayed release tablets
 Dexmedetomidine
@@ -95,6 +103,7 @@ Exelon®
 Exendin-4 SC
 FD&C Blue # 2
 FERRIPROX
+FLUOXETINE
 Fasudil
 Ferriprox
 GM6
@@ -109,6 +118,7 @@ Gold Nanocrystals
 HPP854
 High dose ANAVEX2-73
 Huperzine A
+Ibuprofen
 Idebenone
 Incobotulinum Toxin A
 Inosine
@@ -123,6 +133,7 @@ JACI-35.054
 JNJ-40346527
 Keppra
 L-Serine
+L-Threo DOPS
 LMTM
 LPS
 LY2062430
@@ -136,6 +147,7 @@ Lithium
 Lithium Carbonate
 MK-4334
 MK-8931
+MP-101
 Measurement of serum level of anti-dementia drug
 Medical
 Melatonin
@@ -151,6 +163,7 @@ Minocycline
 Mirtazapine
 Modafinil
 Moxifloxacin
+Muscimol
 N-831(Traneurocin) 10 mg QD
 N-acetylcysteine
 NA-831 (Traneurocin) 20 mg QD
@@ -171,6 +184,7 @@ Nuedexta
 ONO-2506PO
 Olanzapine
 Oxaloacetate (OAA)
+PEA-LUT
 PU-AD
 Paracetamol
 Perampanel
@@ -217,6 +231,7 @@ Senicapoc
 Sertraline
 Simvastatin
 Sinemet
+Single dose C2N-8E12
 Sirolimus
 Sodium Oxybate
 Solanezumab
@@ -234,7 +249,9 @@ Tablet identical physically to active comparator containing some lactose
 Tacrolimus
 Tasigna
 Tasmar
+Tavapadon
 Tilavonemab
+Tolfenamic Acid
 Toviaz
 Trazodone
 VX-745
@@ -284,3 +301,4 @@ sodium phenylbutyrate
 testosterone gel
 tideglusib
 tolcapone
+#############################NEWASSUMEDDRUGS-NEED-TO-VERIFY#############################
