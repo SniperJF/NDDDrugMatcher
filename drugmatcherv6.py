@@ -135,7 +135,9 @@ for row in nddeligsinglecond:
             if row[2] == 'MCI' and ('AD' in trialcondlist or 'PD' in trialcondlist):
                 continue #Don't add it, skip it MCI/AD or MCI/PD pair
             if row[2] == 'AD' and len(trialcondlist) == 1 and 'MCI' in trialcondlist:
-                continue #Don't add it, skip it. MCI/AD or MCI/PD pair. Still may want to take a look at these later... #TODO
+                continue #Don't add it, skip it. MCI/AD pair. Still may want to take a look at these later...
+            if row[2] == 'PD' and len(trialcondlist) == 1 and 'MCI' in trialcondlist:
+                continue #Don't add it, skip it. MCI/PD pair.            
             matchedCTO[row[0]].addNDDInEligCriteria(row[2]) #Store NDD list for use later or for table printing
             ec1matchedtrials.append([row[0], trialcondlist, row[2], str(row[3])]) #we will want to process further*
     else:
@@ -153,6 +155,10 @@ for row in nddeligmulticond:
         #If all eligibility criteria text NDD we found are already listed in our trial conditions then we don't need to include this
         if not econdlist.issubset(trialcondlist): #otherwise we do as we found a NDD that went as unlisted!  #Set theory is useful!
             newndds = econdlist.symmetric_difference(trialcondlist) - trialcondlist #store the ones that are unseen for easier processing
+            if len(newndds) == 1  and 'MCI' in newndds and ('AD' in trialcondlist or 'PD' in trialcondlist):
+                continue #Don't add case where only new NDD is MCI and we already have PD or AD in trial
+            if len(newndds) == 1 and len(trialcondlist) == 1 and 'MCI' in trialcondlist and ('AD' in newndds or 'PD' in newndds):
+                continue #Don't add case where MCI is only Cond in Trial and we only have 1 extra new NDD (MCI/AD or MCI/PD)
             matchedCTO[row[0]].addNDDInEligCriteria(list(newndds)) #Store NDD list for use later or for table printing
             ec2matchedtrials.append([row[0], trialcondlist, econdlist, newndds, str(row[3])]) #we will want to process further*
     else:
