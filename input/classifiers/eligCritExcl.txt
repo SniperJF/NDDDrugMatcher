@@ -18,3 +18,6 @@ NCT00216502; AD only, others exlusion factors
 NCT03068468; PSP only, ALS is in exclusion factors
 NCT01056965; PD in exclusion factors
 NCT01110720; PD in exclusion factors
+NCT02133846; PD, AD medicine ok but not diagnosis
+NCT03658135; PD, AD medicine ok but not diagnosis
+NCT04539041; PD, AD medicine ok but not diagnosis

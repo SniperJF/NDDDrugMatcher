@@ -367,3 +367,5 @@ CoQ10
 GPI 1485
 CST-103
 CST-107
+Chlorpromazine
+Haloperidol
