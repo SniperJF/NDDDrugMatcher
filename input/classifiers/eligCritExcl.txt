@@ -15,3 +15,6 @@ NCT01049399; PSP only, others exclusion factors
 NCT00416169; PSP only, AD is exclusion factor
 NCT00549601; AD only, others exlusion factors
 NCT00216502; AD only, others exlusion factors
+NCT03068468; PSP only, ALS is in exclusion factors
+NCT01056965; PD in exclusion factors
+NCT01110720; PD in exclusion factors
