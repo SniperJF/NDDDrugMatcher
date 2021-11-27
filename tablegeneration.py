@@ -24,8 +24,8 @@ Table14Title  = ["Table 14.  Deleted Intervention Matches in single trials that 
 #These are for reference only to make sure no trials appear here. If they do then they need to be classified somewhere
 Table15Title  = ["Table 15.  Unknown Intervention Class in independent trials involving more than 1 neurodegenerative disorder."]
 Table16Title  = ["Table 16.  Unknown Intervention Class in single trials that included more than 1 neurodegenerative disorder."]
-Table21Title  = ["Table 21.  Unknown Intervention Subclass in independent trials involving more than 1 neurodegenerative disorder."]
-Table22Title  = ["Table 22.  Unknown Intervention Subclass in single trials that included more than 1 neurodegenerative disorder."]
+Table31Title  = ["Table 31.  Unknown Intervention Subclass in independent trials involving more than 1 neurodegenerative disorder."]
+Table32Title  = ["Table 32.  Unknown Intervention Subclass in single trials that included more than 1 neurodegenerative disorder."]
 #These are for the subclasses
 Table17Title   = ["Table 17.  Symptomatic Drugs in independent trials involving more than 1 neurodegenerative disorder."]
 Table18Title   = ["Table 18.  Symptomatic Drugs in single trials that included more than 1 neurodegenerative disorder."]
