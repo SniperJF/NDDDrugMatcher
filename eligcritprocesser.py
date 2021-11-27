@@ -28,9 +28,9 @@ def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, ma
     tableSTEC1Final = jft.generateTableFromCTOsWithEC(jft.TableSTEC1Title, tableSTCTOsEC1) #Make Table
     jft.createCSVfromTable(tableSTEC1Final, "final-tables/NDDCrossTableSTEC1") #Create CSV with table
     jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableSTEC1") #Make hyperlinked version
-    #Next let's get all the data for the new trials which we need for 3
-
-    #TODO We are going to write code make a new csv with trials of interest
+    #Next let's get all the data (built CTO objects) for all the new trials which we need for 3
+    newtrialCTOs = buildECCTOs(ecnewtrials) #Will load output/eligibility-criteria/ csvs with trial data we need
+ 
     #Then we are going to load that up in drugmatcher and pass it to this function to build CTOs out of it
     #Then once we have ctos we can just call above functions to generateTables and then save it to the
     #tablesSTCTOsEC2 list below and then everything else should work automatically then and we will be
@@ -56,5 +56,48 @@ def buildtableSTCTOs(ec1matchedtrials, ec2matchedtrials, matchedCTO):
     #now that we have our list let's get our eligibility criteria version of Table 10 data basically.
     ectableSTCTOs = jft.generateCTOTableST(matchedNCTIDList, matchedCTO)
     return ectableSTCTOs
+
+#Function takes a set of trials NCTID that we want and then goes and gets all data from
+#raw files and then creates files with just the trials we want and saves them to the 
+#output/eligibility-criterial folder with the ec prefix for further processing.
+#TL;DR: makes new csvs with trials of interest. Used in nddfilter to eligibility criteria trials
+def writeECTrialsfromNCTIDset(nctids): #Requires a set containing all NCTIDs we want
+    import csv #needed for function
+    ecmatchentries      = [] #stores matches
+    ecnddoutcomes       = [] #stores outcomes of matches
+    ecndddesignoutcomes = [] #Stores design outcomes of matches
+    with open("queries/chartsv4A.csv") as csv_file: #Get Trial data
+        csv_data = csv.reader(csv_file, delimiter=',')
+        for row in csv_data:
+            if row[0] in nctids: #row[0] has the studies.nct_id
+                ecmatchentries.append(row)
+    sorted_ecmatchentries = sorted(ecmatchentries, key=lambda row: row[0], reverse=False) #sort by nctid
+    with open('output/eligibility-criteria/ecnddtrials.csv', 'w', newline='') as csv_outfile:
+        outfile = csv.writer(csv_outfile)
+        outfile.writerows(sorted_ecmatchentries)
+
+    with open("queries/chartsv4B.csv") as csv_file: #get outcome data
+        csv_data = csv.reader(csv_file, delimiter=',')
+        for row in csv_data:
+            if row[0] in nctids: #this is from a trial we care about
+                    ecnddoutcomes.append(row) #save it
+    sorted_ecnddoutcomes = sorted(ecnddoutcomes, key=lambda row: row[0], reverse=False) #sort by nctid
+    with open('output/eligibility-criteria/ecnddoutcomes.csv', 'w', newline='') as csv_outfile:
+        outfile = csv.writer(csv_outfile)
+        outfile.writerows(sorted_ecnddoutcomes)
+
+    with open("queries/chartsv4C.csv") as csv_file: #get design outcome data
+        csv_data = csv.reader(csv_file, delimiter=',')
+        for row in csv_data:
+            if row[0] in nctids:
+                    ecndddesignoutcomes.append(row) #gg ez
+    sorted_ecndddesignoutcomes = sorted(ecndddesignoutcomes, key=lambda row: row[0], reverse=False) #sort by nctid
+    with open('output/eligibility-criteria/ecndddesignoutcomes.csv', 'w', newline='') as csv_outfile:
+        outfile = csv.writer(csv_outfile)
+        outfile.writerows(sorted_ecndddesignoutcomes)
+
+def buildECCTOs(ecnewtrials):
+    #TODO
+    return []
 
 #END CODE

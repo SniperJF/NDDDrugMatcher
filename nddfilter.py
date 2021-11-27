@@ -5,7 +5,7 @@
 import csv
 #import json #For JSON Export/Imports
 from common import jfc
-
+from eligcritprocesser import writeECTrialsfromNCTIDset
 
 # Row Contents
 # Row[0] studies.nct_id
@@ -206,7 +206,6 @@ for row in sorted_nddeligibilities:
     else:
         nddeligibilities_singlecond.append(row)
 
-
 #write trials with eligibilities to review
 with open('output/eligibility-criteria/nddeligcritall.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
@@ -217,5 +216,11 @@ with open('output/eligibility-criteria/nddeligcritsinglecond.csv', 'w', newline=
 with open('output/eligibility-criteria/nddeligcritmulticond.csv', 'w', newline='') as csv_outfile:
     outfile = csv.writer(csv_outfile)
     outfile.writerows(nddeligibilities_multicond)
+
+#Write All Trial Data for trials with eligibilities to review
+ecNCTIDset = set() #Set to store all the NCTIDs we want
+for entry in sorted_nddeligibilities:
+    ecNCTIDset.add(entry[0]) #Adds all NCTIDs we want and removes duplicates :D
+writeECTrialsfromNCTIDset(ecNCTIDset) #Run code to write all trial data to files.
 
 #END CODE
