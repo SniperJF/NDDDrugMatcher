@@ -110,11 +110,11 @@ def createFinalTables(CTOsListIT, CTOsListST, CTOsListSTEC1, CTOsListSTEC2,
     #Subclassification Tables Independent Trials
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table17Title, subCTOsListIT["sx-drugs"]) ,    "final-tables/NDDCrossTable17")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table19Title, subCTOsListIT["dm-drugs"]) ,    "final-tables/NDDCrossTable19")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table21Title, subCTOsListIT["unknownList"]) , "final-tables/NDDCrossTable21")    
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table21Title, subCTOsListIT["unknownList"]) , "final-tables/NDDCrossTable31")    
     #Subclassification Tables Single Trials
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table18Title, subCTOsListST["sx-drugs"]) ,    "final-tables/NDDCrossTable18")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table20Title, subCTOsListST["dm-drugs"]) ,    "final-tables/NDDCrossTable20")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table22Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable22")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table22Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable32")
 
     #Eligibility Criteria Flagged Tables:
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table21Title, CTOsListSTEC1["drugs"]) ,          "final-tables/NDDCrossTable21")
@@ -134,7 +134,7 @@ def createFinalTables(CTOsListIT, CTOsListST, CTOsListSTEC1, CTOsListSTEC2,
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table30Title, subCTOsListSTEC2["unknownList"]) , "final-tables/NDDCrossTable30")
 
     #Create Hyperlinked Tables:
-    for i in range(1,30+1): #30 because that's how many tables there are so far
+    for i in range(1,32+1): #32 because that's how many tables there are so far
         jft.createHyperLinkedCSV("output/final-tables/", "NDDCrossTable"+str(i))
 
 #Function classifies all CTOs into independent groups and returns a list of CTOs
@@ -298,7 +298,7 @@ def classifyCTOs(CTOs, drugClassifiers, subClassifiers):
                         classifiedCTOs[i].append(entry) #we found a partial match so let's go with that
                         classified_success = True
                         if i == "drugs":
-                            print("Verify:", intervention)
+                            print("Verify:", intervention+":", drugName)
                         break #so we stop checking for this drug
                 if classified_success: #If we found a match in previous class
                     break #movie on to next CTO
