@@ -125,7 +125,7 @@ prevalence of behavioural dysexecutive syndrome
 saline
 saline solution
 sugar pill
-########Temporarily-Deleting-all-Non-Drugs-until-we-classify-the-below-with-more-detail########
+################Temporarily-Deleting-all-Non-Drugs-until-we-classify-the-below-with-more-detail################
 18-FDTBZ
 3D gait analysis
 AAV2-GDNF gene therapy
@@ -168,11 +168,13 @@ Motion Analysis
 Neuromodulation
 Neurosleeve
 Overminus treatment, Non-overminus treatment
+PAACC, REACH-VA
 Passive heat stress
 Phonological, Orthographic, Semantic, Lexical, Untrained
 PoNS Treatment
 Psycho-behavioural assessment
 SBP English, SBP SPANISH
+SAMSTAR, RAVLT
 Scale vaidation
 Therapist LEAP session feedback, Participant LEAP session feedback
 Web-based Survey
@@ -185,3 +187,6 @@ eM2M
 enhanced olfactory stimuli
 low level laser therapy
 powered orthosis
+AOT
+PNF
+PRT

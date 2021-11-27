@@ -1,3 +1,4 @@
+ATH-1017
 BIIB092
 davunetide
 davunetide (AL-108
@@ -11,6 +12,8 @@ Dimebon MR2
 Dimebon MR3
 Dimebon MR4
 Dimebon Transdermal
+E2027
+Fasudil
 Intranasal Insulin
 LMTM
 Metformin
@@ -19,6 +22,8 @@ NA-831 (Traneurocin) 20 mg QD
 NA-831 (Traneurocin) 40 mg QD
 NBMI
 Posiphen
+Salsalate
+Sirolimus
 TPI 287 2 mg/m2
 TPI-287 20 mg/m2
 TPI-287 6.3 mg/m2

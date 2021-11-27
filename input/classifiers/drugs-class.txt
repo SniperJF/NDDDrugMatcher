@@ -271,6 +271,7 @@ Zolpidem
 alprazolam
 aricept
 aripiprazole
+ambroxol hydrochloride
 atomoxetine
 carbidopa-levodopa
 creatine
@@ -280,6 +281,7 @@ diacetylbis(N(4)-methylthiosemicarbazonato) copper(II)
 dimebon
 donepezil (Aricept)
 donepezil hydrochloride
+droxidopa capsules
 entacapone
 es-citalopram
 escitalopram
@@ -289,6 +291,7 @@ ladostigil hemitartrate
 levetiracetam
 lithium carbonate
 memantine
+midodrine hydrochloride
 minocycline
 modafinil
 neflamapimod
@@ -297,8 +300,55 @@ rasagiline
 rasagiline mesylate
 rivastigmine
 sham compression
+sirolimus 2 mg
 sodium phenylbutyrate
 testosterone gel
 tideglusib
 tolcapone
 #############################NEWASSUMEDDRUGS-NEED-TO-VERIFY#############################
+AVP-786
+BZ019
+Blinatumomab, Inotuzumab Ozogamicin
+Botox
+Botulinum Toxin Type A
+Botulinum toxin type A
+Botulinum toxin type A (150 kiloDalton), free from complexing proteins
+Cerebrolysin
+Crenezumab
+Deutetrabenazine
+Elenbecestat
+GRF6021
+Gantenerumab
+Glucophage
+I-123 ADAM
+IncobotulinumtoxinA
+JM-010 group A, JM-010 group B
+LY3002813-IV, LY3002183-SC
+Lecanemab
+Mucosolvan
+MYOBLOC
+NDX-1017
+NH004 tropicamide
+NT 201
+Neu-120
+Nicotine patch
+Nilotinib
+Oligopin
+OnabotulinumtoxinA
+PQ912
+PRP plus BCL, BCL plus PFL, Eye patch plus ocular lubricant ointment
+JM-010
+Pembrolizumab, Lenvatinib
+Pepinemab
+RO7126209
+Sativex
+Semorinemab
+Symmetrel
+Xeomin
+Y-M2M
+ampreloxetine
+antisense oligonucleotide
+curcumin + bioperine
+maltodextrin
+spinal anesthesia
+PEP
