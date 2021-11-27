@@ -83,6 +83,7 @@ Peripheral nerve stimulation
 Phonetic complexity effects on speech motor performance
 Placebo
 Placebo Comparator
+Placebo Oral Capsule
 Placebo Oral Tablet
 Polysomnography
 Positive and Negative Affect Scale (PANAS)
