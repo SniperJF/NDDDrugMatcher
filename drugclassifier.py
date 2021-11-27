@@ -110,11 +110,11 @@ def createFinalTables(CTOsListIT, CTOsListST, CTOsListSTEC1, CTOsListSTEC2,
     #Subclassification Tables Independent Trials
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table17Title, subCTOsListIT["sx-drugs"]) ,    "final-tables/NDDCrossTable17")
     jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table19Title, subCTOsListIT["dm-drugs"]) ,    "final-tables/NDDCrossTable19")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table21Title, subCTOsListIT["unknownList"]) , "final-tables/NDDCrossTable31")    
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table31Title, subCTOsListIT["unknownList"]) , "final-tables/NDDCrossTable31")    
     #Subclassification Tables Single Trials
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table18Title, subCTOsListST["sx-drugs"]) ,    "final-tables/NDDCrossTable18")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table20Title, subCTOsListST["dm-drugs"]) ,    "final-tables/NDDCrossTable20")
-    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table22Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable32")
+    jft.createCSVfromTable( jft.generateTableFromCTOs(jft.Table32Title, subCTOsListST["unknownList"]) , "final-tables/NDDCrossTable32")
 
     #Eligibility Criteria Flagged Tables:
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table21Title, CTOsListSTEC1["drugs"]) ,          "final-tables/NDDCrossTable21")

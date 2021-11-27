@@ -187,9 +187,12 @@ Oxaloacetate (OAA)
 PEA-LUT
 PU-AD
 Paracetamol
+Paxerol - Dose Level 1
 Perampanel
 Phenazopyridine hydrochloride
 Pimavanserin
+Pimavanserin 34 mg
+Pimavanserin 20 mg
 Pimavanserin tartrate
 Pioglitazone
 Posiphen
@@ -306,6 +309,13 @@ testosterone gel
 tideglusib
 tolcapone
 #############################NEWASSUMEDDRUGS-NEED-TO-VERIFY#############################
+L-tyrosine
+Botulinum Toxin
+Bosutinib Oral Tablet
+Nebivolol 5 mg
+metoprolol tartrate 50 mg
+Sildenafil25 mg
+Levodopa
 AVP-786
 BZ019
 Blinatumomab, Inotuzumab Ozogamicin
@@ -333,6 +343,7 @@ NT 201
 Neu-120
 Nicotine patch
 Nilotinib
+Nilotinib Oral Capsule
 Oligopin
 OnabotulinumtoxinA
 PQ912
@@ -352,3 +363,7 @@ curcumin + bioperine
 maltodextrin
 spinal anesthesia
 PEP
+CoQ10
+GPI 1485
+CST-103
+CST-107
