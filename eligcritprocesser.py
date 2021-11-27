@@ -15,6 +15,7 @@
 
 #Imports
 import tablegeneration as jft
+from common import jfc
 
 #Parameters: These are 1,2,and3 from above comment. The fourth one is out matchedCTO objects useful for 1,2 checks.
 #ec1matchedtrials: Stores NCTID, Trial Condition List, NDD listed in eligibility criteria text, and raw eligibility criteria text
@@ -24,22 +25,24 @@ import tablegeneration as jft
 #matchedCTOS:      Clinical Trial Objects. All NDD trials in a beautifully formatted way. Useful for 1 and 2 checks.
 def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO): 
     #First let's build tableSTCTOs which we can use for 1 and 2. 
-    tableSTCTOsEC1  = buildtableSTCTOs(ec1matchedtrials,ec2matchedtrials, matchedCTO)
+    tableSTCTOsEC1  = buildtableSTCTOs1(ec1matchedtrials,ec2matchedtrials, matchedCTO) #prepare to generate table
+ 
+    #Next let's get all the data (built CTO objects) for all the new trials which we need for 3
+    newtrialCTOs = buildECCTOs(ecnewtrials) #Will load output/eligibility-criteria/ csvs with trial data we need
+    tableSTCTOsEC2  = buildtableSTCTOs2(newtrialCTOs) #This prepares the data to generate the tables
+
+    #Save output to tables for both CTO groups:
     tableSTEC1Final = jft.generateTableFromCTOsWithEC(jft.TableSTEC1Title, tableSTCTOsEC1) #Make Table
     jft.createCSVfromTable(tableSTEC1Final, "final-tables/NDDCrossTableSTEC1") #Create CSV with table
     jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableSTEC1") #Make hyperlinked version
-    #Next let's get all the data (built CTO objects) for all the new trials which we need for 3
-    newtrialCTOs = buildECCTOs(ecnewtrials) #Will load output/eligibility-criteria/ csvs with trial data we need
- 
-    #Then we are going to load that up in drugmatcher and pass it to this function to build CTOs out of it
-    #Then once we have ctos we can just call above functions to generateTables and then save it to the
-    #tablesSTCTOsEC2 list below and then everything else should work automatically then and we will be
-    #done!
 
-    tableSTCTOsEC2 = []   #TODO for 3)
-    return tableSTCTOsEC1, tableSTCTOsEC2 #TODO second list
+    tableSTEC2Final = jft.generateTableFromCTOsWithEC(jft.TableSTEC2Title, tableSTCTOsEC2) #Make Table
+    jft.createCSVfromTable(tableSTEC2Final, "final-tables/NDDCrossTableSTEC2") #Create CSV with table
+    jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableSTEC2") #Make hyperlinked version
 
-def buildtableSTCTOs(ec1matchedtrials, ec2matchedtrials, matchedCTO):
+    return tableSTCTOsEC1, tableSTCTOsEC2 #Return it back so it can be fed to drugmatcher
+
+def buildtableSTCTOs1(ec1matchedtrials, ec2matchedtrials, matchedCTO):
     matchedNCTIDset = set() #We need a list of NCTIDs of Trials of interest. Set so we remove dups
     for ctrial in ec1matchedtrials:
         matchedNCTIDset.add(ctrial[0]) #add NCTID, no duplicates allowed
@@ -55,6 +58,18 @@ def buildtableSTCTOs(ec1matchedtrials, ec2matchedtrials, matchedCTO):
 
     #now that we have our list let's get our eligibility criteria version of Table 10 data basically.
     ectableSTCTOs = jft.generateCTOTableST(matchedNCTIDList, matchedCTO)
+    return ectableSTCTOs
+
+#Functions serves as a way of using our old code for this new scenario. So it's like the bridge between
+#worlds 
+def buildtableSTCTOs2(newtrialCTOs):
+    ecmatchedNCTIDList = [] #Will hold all NCTID of Trials we want, And also stores the last updated date
+    for ctrial in newtrialCTOs:
+        ecmatchedNCTIDList.append([newtrialCTOs[ctrial].nctid,newtrialCTOs[ctrial].lastpostedDate])
+     #Let's sort by post date so new stuff appears first (so descending order)
+    ecmatchedNCTIDList.sort(key = lambda row: row[1], reverse=True)
+    #now that we have our list let's get our eligibility criteria version of Table 10 data basically.
+    ectableSTCTOs = jft.generateCTOTableST(ecmatchedNCTIDList, newtrialCTOs)
     return ectableSTCTOs
 
 #Function takes a set of trials NCTID that we want and then goes and gets all data from
@@ -96,8 +111,68 @@ def writeECTrialsfromNCTIDset(nctids): #Requires a set containing all NCTIDs we 
         outfile = csv.writer(csv_outfile)
         outfile.writerows(sorted_ecndddesignoutcomes)
 
+#The plan is to read in the eligibility-criteria data, 
+#create our CTO objects from it, and return that at the end. Similar to what we did in
+#drugmatcherv6 with the original data. sounds ez right? Oh yeah and only create CTO
+#objects from NCTIDs found in the incoming parameter.
+#ecnewtrials: Stores NCTID, NDD listed in eligibility criteria text, and raw eligibility criteria text
 def buildECCTOs(ecnewtrials):
-    #TODO
-    return []
+    import csv #so we can load csv files
+    ecmatchentries      = [] #Store the rows of trial data we care about
+    ecnddoutcomes       = [] #Store the rows of outcomes we care about
+    ecndddesignoutcomes = [] #Stores the rows of design outcomes we care about
+    #Read in data
+    with open("output/eligibility-criteria/ecnddtrials.csv") as csv_file:
+        csv_data = csv.reader(csv_file, delimiter=',')
+        for row in csv_data:
+            ecmatchentries.append(row)
+
+    with open("output/eligibility-criteria/ecnddoutcomes.csv") as csv_file:
+        csv_data = csv.reader(csv_file, delimiter=',')
+        for row in csv_data:
+            ecnddoutcomes.append(row)
+
+    with open("output/eligibility-criteria/ecndddesignoutcomes.csv") as csv_file:
+        csv_data = csv.reader(csv_file, delimiter=',')
+        for row in csv_data:
+            ecndddesignoutcomes.append(row)
+
+    newNCTIDset = set() #Next let's make a set containing all the NCTIDs we want
+    for entry in ecnewtrials:
+        newNCTIDset.add(entry[0]) #entry[0] contains the NCTID, removes duplicates
+    #Let's try to build the CTO objects
+    ecmatchedCTO = {} #Matched Clinical Trial Object :D
+    currNCTID = "NCT00000000" #Code straight outa drugmatcher
+    for row in ecmatchentries:
+        if row[0] in newNCTIDset: #Relevant Trial, build CTO, otherwise we don't need it so ignore it.
+            if currNCTID != row[0]: #new NCTID
+                ecmatchedCTO[row[0]] = jfc.clinicalTrial(row[0],row[1],row[2],row[3],row[4],row[5],
+                             row[6],row[7],row[8],row[9],row[10],row[11], True) #new trial entry
+                #The true at end is because we are  setting condition to flexible
+                currNCTID = row[0]
+            else: #still inserting to current NCTID a new condition or intervention so handle it.
+                #Try adding condition, intervention, or intervention_other_names
+                ecmatchedCTO[row[0]].addCondition(row[2])
+                ecmatchedCTO[row[0]].addInterventions(row[3],0)
+                ecmatchedCTO[row[0]].addInterventions(row[4],1)
+    #Next let's go ahead and add the outcomes
+    for row in ecnddoutcomes:
+        if row[0] in newNCTIDset: #Relevant Trial, build CTO, otherwise we don't need it so ignore it.
+            ecmatchedCTO[row[0]].addOutcome(row[1],row[2])
+
+    #Next let's go ahead and add the design_outcomes (to see if we can fill more info for empty spots)
+    for row in ecndddesignoutcomes:
+        if row[0] in newNCTIDset: #Relevant Trial, build CTO, otherwise we don't need it so ignore it.
+            ecmatchedCTO[row[0]].addDesignOutcomes(row[1],row[2],row[3])
+
+    #So all objects are made now, so let's just add the eligibility criteria and NDD in elig criteria 
+    for row in ecnewtrials:
+        if row[0] in ecmatchedCTO:
+            ecmatchedCTO[row[0]].addEligibilityCriteria(row[2]) #Add eligibilities to our objects
+            ecmatchedCTO[row[0]].addNDDInEligCriteria(list(row[1])) #Store NDD list
+        else:
+            print("Warning: Could not find NCTID of EC Trial in CTO List!")
+
+    return ecmatchedCTO #Done
 
 #END CODE
