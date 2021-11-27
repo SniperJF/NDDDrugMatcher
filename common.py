@@ -12,7 +12,8 @@ class jfc:
     diseaselowercase = {"alzh","amyotro","chronic traumatic encephalopathy","corticobasal degen",
                       "dementia with lewy bodies","frontotemporal","huntington","multiple system atrophy",
                       "parkin","progressive supranuclear palsy", "mild cognitive impairment", "palsy", " pd ",
-                      " msa ", " ad ", "ftdld", " dlb ", "lewy body dementia", "(pd,", "lewy body disease"}
+                      " msa ", " ad ", "ftdld", " dlb ", "lewy body dementia", "(pd,", "lewy body disease",
+                      "multiple systems atrophy"}
 
     #So this one is so we can see if diseases are different by using the power of hashing
     #only meant for duplicate removal atm
@@ -69,6 +70,8 @@ class jfc:
         "Huntington": "HD",
         "Multiple System Atrophy": "MSA",
         "multiple system atrophy": "MSA",
+        "Multiple Systems Atrophy": "MSA",
+        "multiple systems atrophy": "MSA",
         "Parkin": "PD",
         "parkin": "PD",
         "PARKIN": "PD",
