@@ -1,0 +1,17 @@
+#####This list is for trials to exclude from NDD eligibility criteria because they were incorrectly  flagged as having multiple NDD Listed. NCTID listed, followed by reason for exclusion#####
+NCT04292223; MSA and PSP are exclusion factors
+NCT04334317; DLB only if they meet criteria for PD
+NCT04588285; this is DLB and MCI of DLB; one disorder
+NCT02703636; HD, PD are listed in the exclusion criteria
+NCT01522404; HD are in the exclusion criteria
+NCT02839642; PD is listed in exclusion criteria
+NCT00063193; PD only, PSP listed in the exlusion factors
+NCT01327859; PD only, PSP is listed in the exlusion factors
+NCT00977665; this MSA with parkinsonism, but not PD
+NCT00478205; PD is an exlusion factor
+NCT01287221; MSA only, PD is exslusion factor
+NCT01187888; PSP only, parkinsonism is in exclusion factors
+NCT01049399; PSP only, others exclusion factors
+NCT00416169; PSP only, AD is exclusion factor
+NCT00549601; AD only, others exlusion factors
+NCT00216502; AD only, others exlusion factors
