@@ -11,13 +11,14 @@ class jfc:
     #To try partial matching
     diseaselowercase = {"alzh","amyotro","chronic traumatic encephalopathy","corticobasal degen",
                       "dementia with lewy bodies","frontotemporal","huntington","multiple system atrophy",
-                      "parkin","progressive supranuclear palsy", "mild cognitive impairment", "palsy"
-                      " ad ", "ftdld", " dlb ", "lewy body dementia"}
+                      "parkin","progressive supranuclear palsy", "mild cognitive impairment", "palsy", " pd ",
+                      " msa ", " ad ", "ftdld", " dlb ", "lewy body dementia", "(pd,", "lewy body disease"}
 
     #So this one is so we can see if diseases are different by using the power of hashing
     #only meant for duplicate removal atm
     diseaseHashMap = {
         "AD": "AD",
+        " pd ": "PD",
         " ad ": "AD",
         "ALS": "ALS",
         "CBD": "CBD",
@@ -29,7 +30,9 @@ class jfc:
         "ftdld": "FTDLD",
         "HD": "HD",
         "MSA": "MSA",
+        " msa ": "MSA",
         "PD": "PD",
+        "(pd,": "PD",
         "PSP": "PSP",
         "MCI": "MCI",
         "Alzh": "AD",
@@ -59,6 +62,7 @@ class jfc:
         "lewy body dementia": "DLB",
         "Dementia, Lewy Body": "DLB",
         "Lewy Body Disease": "DLB",
+        "lewy body disease": "DLB",
         "Frontotemporal": "FTDLD",
         "frontotemporal": "FTDLD",
         "Fronto": "FTDLD",
@@ -149,7 +153,8 @@ class jfc:
     #Class to more cleanly store the trials (which we will then convert to JSON for the App)
     class clinicalTrial:
         def __init__(self, nctid, title, condition, intervention, otherIntervention, lastpostedDate, 
-                    phase, acronym, enrollment, timeFrame, firstpostedDate, studyStatus): #outcomeTitle #outcomeDescription
+                    phase, acronym, enrollment, timeFrame, firstpostedDate,
+                    studyStatus, flexibleCondition=False): #outcomeTitle #outcomeDescription
             self.nctid = nctid
             self.title = title
             self.condition = []
@@ -169,12 +174,17 @@ class jfc:
             self.outcomeDescription = [] #we will add these later
             self.eligibilityCriteria = [] #we optionally can add these later
             self.nddInEligCriteria = [] #we optionally can add these later, if any, only stores NDD that dont appear already in conditions
+            #By default we want warnings if condition isn't found in hashmap but can disable for non NDD Trials. So we used default
+            self.flexibleCondition = flexibleCondition #paramater set to false so can only actively disable the check
             self.addCondition(condition)
             self.addInterventions(intervention, 0)
             self.addInterventions(otherIntervention, 1)
         def addCondition(self, cond):
             #Todo, clean up condition by storing under one clean name so like no mispellings, also dont store dups
-            cleanCond = jfc.getCleanCondition(cond)
+            if not self.flexibleCondition:
+                cleanCond = jfc.getCleanCondition(cond)
+            else: #Flexible condition, throw it in do no checks. Yolo
+                cleanCond = cond
             if cleanCond not in self.condition:
                 self.condition.append(cleanCond)
         def addInterventions(self, intervention, intType):
@@ -186,6 +196,8 @@ class jfc:
             else: #other intervention
                 if intervention not in self.otherIntervention:
                     self.otherIntervention.append(intervention)
+        def setFlexibleCondition(self): #Enables flexibility in condition, will disable warning
+            self.flexibleCondition = True
         def addOutcome(self, oT, oD):
             if oT not in self.outcomeTitle:
                 self.outcomeTitle.append(oT)
@@ -220,6 +232,8 @@ class jfc:
             shortend = shortend.replace("weeks", "w")
             return shortend
         def getConditionAcronyms(self): #Returns acronyms of all conditions here as a list
+            if(self.flexibleCondition): #If flexible condition is enabled we can't generate acronyms
+                return self.condition #so just return the raw condition list.
             cond = []
             for i in self.condition:
                 #for x in jfc.diseaseHashMap: #for when we dont trust if there are errors
