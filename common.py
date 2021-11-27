@@ -13,7 +13,7 @@ class jfc:
                       "dementia with lewy bodies","frontotemporal","huntington","multiple system atrophy",
                       "parkin","progressive supranuclear palsy", "mild cognitive impairment", "palsy", " pd ",
                       " msa ", " ad ", "ftdld", " dlb ", "lewy body dementia", "(pd,", "lewy body disease",
-                      "multiple systems atrophy"}
+                      "multiple systems atrophy", "lewy body dementia"}
 
     #So this one is so we can see if diseases are different by using the power of hashing
     #only meant for duplicate removal atm

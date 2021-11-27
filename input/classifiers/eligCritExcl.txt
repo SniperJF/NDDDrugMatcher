@@ -21,3 +21,15 @@ NCT01110720; PD in exclusion factors
 NCT02133846; PD, AD medicine ok but not diagnosis
 NCT03658135; PD, AD medicine ok but not diagnosis
 NCT04539041; PD, AD medicine ok but not diagnosis
+NCT04201093; MSA and PDP excluded
+NCT04369430; MSA, DLB, PSP excluded
+NCT04381468; FTDLD, MCI, DLB excluded
+NCT03639987; DLB, FTDLD excluded
+NCT04489017; AD excluded
+NCT03056729; NDDs excluded
+NCT04253132; PD excluded
+NCT00921128; NDD excluded
+NCT02494024; PD excluded
+NCT01397539; DLB excluded
+NCT00076492; PSP excluded
+NCT03739814; PD excluded
