@@ -24,6 +24,9 @@ from common import jfc
 #ecnewtrials:      Stores NCTID, NDD listed in eligibility criteria text, and raw eligibility criteria text
 #matchedCTOS:      Clinical Trial Objects. All NDD trials in a beautifully formatted way. Useful for 1 and 2 checks.
 def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO): 
+    #Before anything remove list of trials to exclude due to manual checks
+    ec1matchedtrials, ec2matchedtrials, ecnewtrials = removeECexclusions(ec1matchedtrials, ec2matchedtrials, ecnewtrials)
+
     #First let's build tableSTCTOs which we can use for 1 and 2. 
     tableSTCTOsEC1  = buildtableSTCTOs1(ec1matchedtrials,ec2matchedtrials, matchedCTO) #prepare to generate table
  
@@ -41,6 +44,29 @@ def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, ma
     jft.createHyperLinkedCSV("output/final-tables/","NDDCrossTableSTEC2") #Make hyperlinked version
 
     return tableSTCTOsEC1, tableSTCTOsEC2 #Return it back so it can be fed to drugmatcher
+
+#Will open our elig-crit-exclusions.txt to get NCTID list of trials to remove from all 3
+#of our files since they are false positive matches. List was manually curated. So trust
+def removeECexclusions(ec1matchedtrials, ec2matchedtrials, ecnewtrials):    
+    exclusionSet = set()
+    f = open("input/classifiers/eligCritExcl.txt", "r")
+    for line in f:
+        try:
+            nctid = line.partition(";")[0]
+            exclusionSet.add(nctid)
+        except:
+            print("Warning Could not Extract an NCTID from eligCritExcl.txt!")
+    f.close()
+    for entry in ec1matchedtrials: #Remove trial
+        if entry[0] in exclusionSet:
+            ec1matchedtrials.remove(entry)
+    for entry in ec2matchedtrials: #Remove trial
+        if entry[0] in exclusionSet:
+            ec2matchedtrials.remove(entry)
+    for entry in ecnewtrials:      #Remove trial
+        if entry[0] in exclusionSet:
+            ecnewtrials.remove(entry)
+    return ec1matchedtrials, ec2matchedtrials, ecnewtrials
 
 def buildtableSTCTOs1(ec1matchedtrials, ec2matchedtrials, matchedCTO):
     matchedNCTIDset = set() #We need a list of NCTIDs of Trials of interest. Set so we remove dups
