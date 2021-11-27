@@ -25,7 +25,7 @@ from common import jfc
 #matchedCTOS:      Clinical Trial Objects. All NDD trials in a beautifully formatted way. Useful for 1 and 2 checks.
 def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, matchedCTO): 
     #Before anything remove list of trials to exclude due to manual checks
-    ec1matchedtrials, ec2matchedtrials, ecnewtrials = removeECexclusions(ec1matchedtrials, ec2matchedtrials, ecnewtrials)
+    removeECexclusions(ec1matchedtrials, ec2matchedtrials, ecnewtrials)
 
     #First let's build tableSTCTOs which we can use for 1 and 2. 
     tableSTCTOsEC1  = buildtableSTCTOs1(ec1matchedtrials,ec2matchedtrials, matchedCTO) #prepare to generate table
@@ -50,6 +50,7 @@ def eligibilitycritprocessor(ec1matchedtrials, ec2matchedtrials, ecnewtrials, ma
 def removeECexclusions(ec1matchedtrials, ec2matchedtrials, ecnewtrials):    
     exclusionSet = set()
     f = open("input/classifiers/eligCritExcl.txt", "r")
+    next(f) #skip first line
     for line in f:
         try:
             nctid = line.partition(";")[0]
@@ -57,16 +58,16 @@ def removeECexclusions(ec1matchedtrials, ec2matchedtrials, ecnewtrials):
         except:
             print("Warning Could not Extract an NCTID from eligCritExcl.txt!")
     f.close()
-    for entry in ec1matchedtrials: #Remove trial
+    #Fix: had to add [:] because we need to pass a copy of list and not list itself else it skips!
+    for entry in ec1matchedtrials[:]: #Remove trial
         if entry[0] in exclusionSet:
             ec1matchedtrials.remove(entry)
-    for entry in ec2matchedtrials: #Remove trial
+    for entry in ec2matchedtrials[:]: #Remove trial
         if entry[0] in exclusionSet:
             ec2matchedtrials.remove(entry)
-    for entry in ecnewtrials:      #Remove trial
+    for entry in ecnewtrials[:]:      #Remove trial
         if entry[0] in exclusionSet:
             ecnewtrials.remove(entry)
-    return ec1matchedtrials, ec2matchedtrials, ecnewtrials
 
 def buildtableSTCTOs1(ec1matchedtrials, ec2matchedtrials, matchedCTO):
     matchedNCTIDset = set() #We need a list of NCTIDs of Trials of interest. Set so we remove dups

@@ -5,6 +5,7 @@ Armodafinil
 Cannabis
 Carbidopa
 Donepezil
+donepezil
 Droxidopa
 Entacapone
 Incobotulinum Toxin A
