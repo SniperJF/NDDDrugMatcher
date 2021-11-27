@@ -37,3 +37,6 @@ NCT04287829; PD and AD not present
 NCT03021486; PD, AD excluded
 NCT01597518; AD, PD excluded
 NCT00751101; AD, PD excluded
+NCT04067414; ALS, PD excluded
+NCT02646826; NDD excluded
+NCT02131545; HD, PD excluded
