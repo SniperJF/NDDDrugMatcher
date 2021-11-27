@@ -127,9 +127,9 @@ def createFinalTables(CTOsListIT, CTOsListST, CTOsListSTEC1, CTOsListSTEC2,
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table24Title, nondrugsEC2) ,                     "final-tables/NDDCrossTable24")
     #Subclassification for Eligibility Criteria Flagged Trials
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table25Title, subCTOsListSTEC1["sx-drugs"]) ,    "final-tables/NDDCrossTable25")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table27Title, subCTOsListSTEC1["dm-drugs"]) ,    "final-tables/NDDCrossTable27")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table26Title, subCTOsListSTEC1["dm-drugs"]) ,    "final-tables/NDDCrossTable26")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table29Title, subCTOsListSTEC1["unknownList"]) , "final-tables/NDDCrossTable29")
-    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table26Title, subCTOsListSTEC2["sx-drugs"]) ,    "final-tables/NDDCrossTable26")
+    jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table27Title, subCTOsListSTEC2["sx-drugs"]) ,    "final-tables/NDDCrossTable27")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table28Title, subCTOsListSTEC2["dm-drugs"]) ,    "final-tables/NDDCrossTable28")
     jft.createCSVfromTable( jft.generateTableFromCTOsWithEC(jft.Table30Title, subCTOsListSTEC2["unknownList"]) , "final-tables/NDDCrossTable30")
 
@@ -338,7 +338,7 @@ def runDrugClassifier(CTOsIT, CTOsST,  CTOsSTEC1, CTOsSTEC2):
 
     #finally let's create our final tables as CSV
     createFinalTables(classifiedCTOsListIT, classifiedCTOsListST, classifiedCTOsListSTEC1, classifiedCTOsListSTEC2,
-                      subclassifiedCTOsListIT, subclassifiedCTOsListST, subclassifiedCTOsListSTEC1, subclassifiedCTOsListSTEC1)
+                      subclassifiedCTOsListIT, subclassifiedCTOsListST, subclassifiedCTOsListSTEC1, subclassifiedCTOsListSTEC2)
 
 #END CODE
 
