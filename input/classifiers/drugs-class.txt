@@ -42,6 +42,7 @@ Blarcamesine
 Bromocriptine
 Bupropion
 CBD
+smoked cannabis high cbd/low thc
 CNM-Au8
 CORT108297
 Caffeine
@@ -309,6 +310,7 @@ testosterone gel
 tideglusib
 tolcapone
 #############################NEWASSUMEDDRUGS-NEED-TO-VERIFY#############################
+nuedexta®
 L-tyrosine
 Botulinum Toxin
 Bosutinib Oral Tablet

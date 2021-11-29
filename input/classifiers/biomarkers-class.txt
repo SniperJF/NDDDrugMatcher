@@ -65,6 +65,7 @@ Flutemetamol F18 Injection
 Fundus Photography
 GE180 PET Scan
 Gait Assessment
+H215O PET
 I-123 Ioflupane solution injection prior to SPECT scan (DaTscan)
 LY3191748
 Lodosyn
