@@ -70,3 +70,7 @@ NCT01548937; Exclude. Dr. C
 NCT02259049; Exclude. Dr. C 
 NCT01844648; Exclude. Dr. C
 NCT01044992; Biomarker Trial. Exclude for now. Dr. C
+NCT04117178; Biomarker Trial. Exclude for now. Dr. C
+NCT04764669; Biomarker Trial. Exclude for now. Dr. C
+NCT03589976; Exclude,  Parkinsonism is not PD. Dr. C
+NCT04734379; Biomarker Trial. Exclude for now. Dr. C
